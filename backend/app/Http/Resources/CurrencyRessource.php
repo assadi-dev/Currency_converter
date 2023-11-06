@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class CurrencyRessource extends ResourceCollection
+class CurrencyRessource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -14,6 +14,10 @@ class CurrencyRessource extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return parent::toArray([
+            "id" => $this->id,
+            "code" => $this->code,
+            "name" => $this->name,
+        ]);
     }
 }

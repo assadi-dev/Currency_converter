@@ -14,8 +14,7 @@ class AddCountToCurrencyConversionPairs extends Migration
     public function up()
     {
         Schema::table('currency_conversion_pairs', function (Blueprint $table) {
-            //
-            $table->integer('count')->after('exchange_rate');
+            $table->integer('count')->after('exchange_rate')->default(0);
         });
     }
 

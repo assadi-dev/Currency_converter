@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CurrencyRessource;
 use App\Models\Currency;
 use Illuminate\Http\Request;
+use App\Http\Resources\CurrencyRessource;
+use Illuminate\Support\Facades\Validator;
 
 class CurrencyController extends Controller
 {
@@ -15,7 +16,15 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        return CurrencyRessource::collection(Currency::all());
+
+        try {
+            return CurrencyRessource::collection(Currency::get());
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -26,7 +35,43 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        try {
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                'code' => 'required',
+                'name' => 'required',
+                ]
+            );
+
+            if($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 400);
+            }
+
+
+            $currency = Currency::create([
+                'code' => $request->code,
+                'name' => $request->name,
+            ]);
+
+
+            return response()->json([
+                'message' => 'Devise crée',
+                'code' => $currency->code,
+                'name' => $currency->name
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
+
     }
 
     /**
@@ -37,7 +82,23 @@ class CurrencyController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $currency = Currency::find($id);
+
+            if(!isset($currency)) {
+                return response()->json([
+                    'message' => 'Devise introuvable',
+                ], 404);
+            }
+
+            return response()->json($currency);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -49,7 +110,52 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
+
+
+        try {
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                'code' => 'required',
+                'name' => 'required',
+                ]
+            );
+
+            if($validateUser->fails()) {
+                return response()->json([
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 400);
+            }
+            $currency = Currency::find($id);
+
+            if(!isset($currency)) {
+                return response()->json([
+                    'message' => 'Devise introuvable',
+                ], 404);
+            }
+
+
+            $currency->code =  $request->code;
+            $currency->name =  $request->name;
+            $currency->update();
+
+
+
+
+            return response()->json([
+                'message' => 'la devise à été mise à jour',
+                'code' => $currency->code,
+                'name' => $currency->name
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -60,6 +166,26 @@ class CurrencyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $currency = Currency::find($id);
+
+            if(!isset($currency)) {
+                return response()->json([
+                    'message' => 'Devise introuvable',
+                ], 404);
+            }
+
+            $currency->delete();
+            return response()->json([
+                'message' => 'Devise supprimé',
+
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 }

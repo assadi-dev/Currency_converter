@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\CurrencyConversionPairsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
-Route::middleware('auth:sanctum')->get('/currencies', [CurrencyController::class, 'index']);
+Route::post('/currencies', [CurrencyController::class, 'store']);
+Route::get('/currencies', [CurrencyController::class, 'index']);
+Route::get('/currency/{id}', [CurrencyController::class, 'show']);
+Route::put('/currency/{id}', [CurrencyController::class, 'update']);
+Route::delete('/currency/{id}', [CurrencyController::class, 'destroy']);
+Route::get('/currency_convert_pairs', [CurrencyConversionPairsController::class, 'index']);
+Route::post('/currency_convert_pairs', [CurrencyConversionPairsController::class, 'store']);
