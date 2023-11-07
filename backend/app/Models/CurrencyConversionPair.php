@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CurrencyConversionPair extends Model
 {
@@ -24,6 +25,27 @@ class CurrencyConversionPair extends Model
     public function toCurrency()
     {
         return $this->belongsTo(Currency::class, 'to_currency_id');
+    }
+
+
+    /**
+     *  @param string from_currency
+     *  @param string to_currency
+     *
+     *
+     */
+    public static function findByExchangeRate($from_currency, $to_currency)
+    {
+        $results = DB::table("currency_conversion_pairs")
+        ->selectRaw("currency_conversion_pairs.id,currencies.code as from_currency, toCurrency.code as to_currency ,exchange_rate")
+        ->leftJoin('currencies', "currencies.id", '=', "currency_conversion_pairs.from_currency_id")
+         ->leftJoin('currencies as toCurrency', "toCurrency.id", '=', "currency_conversion_pairs.to_currency_id")
+         ->whereRaw('currencies.code = ?', [$from_currency])
+         ->whereRaw('toCurrency.code = ?', [$to_currency])
+        ->get()
+        ;
+
+        return  $results[0];
     }
 
 
