@@ -131,6 +131,9 @@ class CurrencyConversionPairsController extends Controller
                     'errors' =>  'Paire introuvable'
                 ], 404);
             }
+
+            $currencyConversionPair->from_currency_id = $request->from_currency_id;
+            $currencyConversionPair->to_currency_id = $request->to_currency_id;
             $currencyConversionPair->exchange_rate = $request->exchange_rate;
             $currencyConversionPair->update();
 
