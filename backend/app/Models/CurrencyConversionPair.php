@@ -45,7 +45,12 @@ class CurrencyConversionPair extends Model
         ->get()
         ;
 
-        return  $results[0];
+        if(isset($results)) {
+
+            return  $results[0];
+        } else {
+            return null;
+        }
     }
 
 
