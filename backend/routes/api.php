@@ -32,4 +32,6 @@ Route::put('/currency/{id}', [CurrencyController::class, 'update']);
 Route::delete('/currency/{id}', [CurrencyController::class, 'destroy']);
 Route::get('/currency_convert_pairs', [CurrencyConversionPairsController::class, 'index']);
 Route::post('/currency_convert_pairs', [CurrencyConversionPairsController::class, 'store']);
+Route::put('/currency_convert_pair/{id}', [CurrencyConversionPairsController::class, 'update']);
+Route::delete('/currency_convert_pair/{id}', [CurrencyConversionPairsController::class, 'destroy']);
 Route::get('/currency_converter/{from_currency}/{to_currency}/{amount}', [CurrencyConverterController::class,'convert']);

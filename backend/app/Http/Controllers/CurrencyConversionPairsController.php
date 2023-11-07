@@ -93,7 +93,25 @@ class CurrencyConversionPairsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {}
+    public function show($id)
+    {
+        try {
+            $currencyConversionPair = CurrencyConversionPair::find($id);
+            if(!isset($currencyConversionPair)) {
+                return response()->json([
+                    'message' => 'no found',
+                    'errors' =>  'Paire introuvable'
+                ], 404);
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
+
+    }
 
     /**
      * Update the specified resource in storage.
@@ -107,9 +125,13 @@ class CurrencyConversionPairsController extends Controller
         try {
 
             $currencyConversionPair = CurrencyConversionPair::find($id);
-            // $currencyConversionPair= $request->exchange_rate;
+            if(!isset($currencyConversionPair)) {
+                return response()->json([
+                    'message' => 'no found',
+                    'errors' =>  'Paire introuvable'
+                ], 404);
+            }
             $currencyConversionPair->exchange_rate = $request->exchange_rate;
-
             $currencyConversionPair->update();
 
             return response()->json([
@@ -118,7 +140,7 @@ class CurrencyConversionPairsController extends Controller
                 'from_currency' => $currencyConversionPair->fromCurrency,
                 'to_currency' => $currencyConversionPair->toCurrency,
                 'exchange_rate' => $currencyConversionPair->exchange_rate
-            ], 201);
+            ], 200);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -136,6 +158,17 @@ class CurrencyConversionPairsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $currencyConversionPair = CurrencyConversionPair::find($id);
+        if(!isset($currencyConversionPair)) {
+            return response()->json([
+                'message' => 'no found',
+                'errors' =>  'Paire introuvable'
+            ], 404);
+        }
+
+        $currencyConversionPair->delete();
+        return response()->json([
+            "message" => "paire supprimé",
+        ], 200);
     }
 }
