@@ -6,6 +6,7 @@ import HomeAdminViewVue from '../views/Admin/HomeAdminView.vue'
 import LoginVue from '../views/Authentication/Login.vue'
 import AdminLayoutVue from '../views/Admin/AdminLayout.vue'
 import DashboardViewVue from '../views/Admin/DashboardView/DashboardView.vue'
+import CurrencyViewVue from '../views/Admin/CurrencyView/CurrencyView.vue'
 
 
 const router = createRouter({
@@ -41,7 +42,7 @@ const router = createRouter({
             {
               path: 'currency',
               name: 'admin-currency',
-              component: LoginVue
+              component: CurrencyViewVue
             },
             {
               path: 'currency-pairs',
