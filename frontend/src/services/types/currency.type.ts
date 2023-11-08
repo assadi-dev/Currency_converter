@@ -1,8 +1,8 @@
 
 export type Currency= {
     id: Number,
-    code: String,
-    name:String
+    code: string,
+    name:string
     
 }
 

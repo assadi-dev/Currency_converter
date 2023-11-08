@@ -6,7 +6,7 @@ import * CurrencyApi from "../services/api/Currency.api"
 export const useFetchCurrencies = () => {
     const currencies = ref<Currency[] | null>(null)
 
-    const error = ref<String | null>(null)
+    const error = ref<string | null>(null)
   
     const isLoading = ref(false)
     async function fetchData() {

@@ -1,10 +1,10 @@
 export type UserLogin ={
-    email?: String
-    password?:String
+    email?: string
+    password?:string
     
 }
 
 export type ApiUserLoginResponse ={
-    message?:String
-    token:String
+    message?:string
+    token:string
 }
