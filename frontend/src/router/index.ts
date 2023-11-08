@@ -23,16 +23,19 @@ const router = createRouter({
 },
     {
       path: '/admin',
-          name: 'dashboard',
+   
       component:AdminLayoutVue,
       children: [
 
         {
           path: '',
+          redirect:{name:"dashboard"},
           component: HomeAdminViewVue,
           children: [
             {
-              path: '',
+            
+              path: 'dashboard',
+              name: 'dashboard',
               component: DashboardViewVue
             },
             {
