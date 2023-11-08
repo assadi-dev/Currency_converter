@@ -1,10 +1,10 @@
 import { ref } from "vue"
-import { Currency } from "../services/types/currency.type"
-import * CurrencyApi from "../services/api/Currency.api"
+import { Currency,ApiCurrencySuccess } from "../services/types/currency.type"
+import * as CurrencyApi from "../services/api/Currency.api"
 
 
 export const useFetchCurrencies = () => {
-    const currencies = ref<Currency[] | null>(null)
+    const currencies = ref<ApiCurrencySuccess[] | null>(null)
 
     const error = ref<string | null>(null)
   

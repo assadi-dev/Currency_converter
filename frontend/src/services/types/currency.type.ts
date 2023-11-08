@@ -8,4 +8,8 @@ export type Currency= {
     
 }
 
-export type CurrencyWithoutId = Omit<Currency,'id'>
+export type CurrencyWithoutId = Omit<Currency, 'id'>
+
+export type ApiCurrencySuccess = {
+    data:Currency[]
+}

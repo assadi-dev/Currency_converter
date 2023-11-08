@@ -31,8 +31,7 @@ class AuthController extends Controller
 
             if($validateUser->fails()) {
                 return response()->json([
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'message' => 'Champs manquant',
                 ], 401);
             }
 
@@ -74,14 +73,14 @@ class AuthController extends Controller
 
             if($validateUser->fails()) {
                 return response()->json([
-                    'message' => $validateUser->errors()
+                    'message' => "Email ou mot de passe manquant"
                 ], 401);
             }
 
             if(!Auth::attempt($request->only(['email', 'password']))) {
                 return response()->json([
                     'message' => 'Email ou mot de passe incorrect',
-                ], 401);
+                ], 404);
             }
 
             $user = User::where('email', $request->email)->first();

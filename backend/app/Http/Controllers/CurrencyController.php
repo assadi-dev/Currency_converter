@@ -18,7 +18,7 @@ class CurrencyController extends Controller
     {
 
         try {
-            return CurrencyRessource::collection(Currency::get());
+            return CurrencyRessource::collection(Currency::paginate(5));
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'server error',
