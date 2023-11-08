@@ -1,10 +1,10 @@
-export type UserLogin {
+export type UserLogin ={
     email: String
     password:String
     
 }
 
-export type ApiUserLoginResponse {
+export type ApiUserLoginResponse ={
     message:String
     token:String
 }
