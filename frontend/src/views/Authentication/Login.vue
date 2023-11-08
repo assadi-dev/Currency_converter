@@ -20,7 +20,7 @@
                         <Password id="password1" v-model="password" placeholder="Mot de passe" :toggleMask="true" class="w-full mb-3" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
 
                         <div class="flex align-items-center justify-content-between mt-5 gap-5">
-                            <Button type="submit" label="Se connecter" class="w-full p-3 text-xl"></Button>
+                            <Button :loading="loading" type="submit" label="Se connecter" class="w-full p-3 text-xl"></Button>
                         </div>
                       
                     </div>
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <Toast  position="bottom-center" group="bc" @close="onClose" />
+    <Toast  position="bottom-center" group="bc"  />
 </template>
 
 <script setup lang="ts">
@@ -46,7 +46,6 @@ import { useToast } from "primevue/usetoast";
 import Toast from 'primevue/toast';
 
 const toast = useToast();
-const visible = ref(false);
 
 const router = useRouter()
 
@@ -57,22 +56,18 @@ const email = ref<string|null>(null)
 const loading = ref(false)
 
 //Toast Action
-const onClose = () => {
-    visible.value = false;
-}
 
 const showSuccesToast = (message:string) => {
-    if (!visible.value) {
-        toast.add({ severity: 'success', summary: 'OK', detail: message,group:"bc" });
-        visible.value = true;
-    } 
+  
+        toast.add({ severity: 'success', summary: 'OK', detail: message,group:"bc",life: 3000  });
+       
+    
 };
 
 const showErrorToast = (message:string) => {
-    if (!visible.value) {
-        toast.add({ severity: 'error', summary: 'Erreur', detail: message,group:"bc" });
-        visible.value = true;
-    } 
+   
+        toast.add({ severity: 'error', summary: 'Erreur', detail: message,group:"bc" ,life: 3000 });
+       
 };
 
 
@@ -85,13 +80,13 @@ const onSubmit = async(e) => {
         const data = { email:email.value, password:password.value }
         const res = await userConnect(data)
 
-        showSuccesToast(res.message)
+        showSuccesToast("Connexion reussie !")
 
         const token = res.token
 
         setItem(AUTH_KEY_STORAGE,token)
-
-        router.push({name:"dashboard"})
+        setTimeout(()=> router.push({name:"dashboard"}),1000)
+       
         
 
     } catch (error: any) {
