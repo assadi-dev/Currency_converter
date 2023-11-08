@@ -1,12 +1,10 @@
 <template>
     <div>
-<h1>Admin</h1>
-<RouterView />
+    <h2>Dashboard</h2>
     </div>
 </template>
 
 <script setup lang="ts">
-
 
 </script>
 

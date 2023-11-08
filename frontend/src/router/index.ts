@@ -5,6 +5,7 @@ import HomeViewVue from '../views/HomeView.vue'
 import HomeAdminViewVue from '../views/Admin/HomeAdminView.vue'
 import LoginVue from '../views/Authentication/Login.vue'
 import AdminLayoutVue from '../views/Admin/AdminLayout.vue'
+import DashboardViewVue from '../views/Admin/DashboardView/DashboardView.vue'
 
 
 const router = createRouter({
@@ -16,31 +17,31 @@ const router = createRouter({
       component: HomeViewVue
     },
     {
+      path: '/admin/login',
+      name: 'admin-login',
+      component: LoginVue
+},
+    {
       path: '/admin',
-      component:AdminLayoutVue ,
-      children: [
-        {
-              path: '/admin/login',
-              name: 'admin-login',
-              component: LoginVue
-        },
-        {
-          path: '/admin',
           name: 'dashboard',
+      component:AdminLayoutVue,
+      children: [
+
+        {
+          path: '',
           component: HomeAdminViewVue,
           children: [
             {
-              path: '/admin/home',
-              name: 'admin-home',
-              component: LoginVue
+              path: '',
+              component: DashboardViewVue
             },
             {
-              path: '/admin/currency',
+              path: 'currency',
               name: 'admin-currency',
               component: LoginVue
             },
             {
-              path: '/admin/currency-pairs',
+              path: 'currency-pairs',
               name: 'admin-currency-pairs',
               component: LoginVue
             },

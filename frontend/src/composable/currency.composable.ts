@@ -14,7 +14,7 @@ export const useFetchCurrencies = () => {
     
         try {
           const response = await CurrencyApi.fetchAll()
-          currencies.value = response
+          currencies.value = response.data
         } catch (err: unknown) {
           error.value = (err as Error).message
         } finally {
