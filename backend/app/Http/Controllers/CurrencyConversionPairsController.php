@@ -20,8 +20,8 @@ class CurrencyConversionPairsController extends Controller
             return CurrencyConversionPairsRessource::collection(CurrencyConversionPair::all());
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'server error',
-                'errors' => $th->getMessage()
+
+                'message' => $th->getMessage()
             ], 500);
         }
 
@@ -48,9 +48,8 @@ class CurrencyConversionPairsController extends Controller
 
             if($validateUser->fails()) {
                 return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+
+                    'message' => $validateUser->errors()
                 ], 400);
             }
 
@@ -81,8 +80,8 @@ class CurrencyConversionPairsController extends Controller
             ], 201);
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'server error',
-                'errors' => $th->getMessage()
+
+                'message' => $th->getMessage()
             ], 500);
         }
     }

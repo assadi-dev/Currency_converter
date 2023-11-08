@@ -44,8 +44,8 @@ class CurrencyConverterController extends Controller
 
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'server error',
-                'errors' => $th->getMessage()
+
+                'message' => $th->getMessage()
             ], 500);
         }
     }
