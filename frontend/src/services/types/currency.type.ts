@@ -1,5 +1,5 @@
 
-export type Currency {
+export type Currency= {
     id: Number,
     code: String,
     name:String
