@@ -5,6 +5,6 @@ export type UserLogin {
 }
 
 export type ApiUserLoginResponse {
-    message:String,
+    message:String
     token:String
 }
