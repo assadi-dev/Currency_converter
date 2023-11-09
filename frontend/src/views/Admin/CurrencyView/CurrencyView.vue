@@ -15,6 +15,7 @@
 
     import Toast from 'primevue/toast';
 import Dialog from 'primevue/dialog';
+import FormCurrencyView from './FormCurrencyView.vue';
     
     const first = ref(0);
     //const loading = ref(false);
@@ -44,7 +45,7 @@ import Dialog from 'primevue/dialog';
     const deleteSelectedCurrencyDialog = ref(false)
     const newCurrencyDialog = ref(false)
 
-    const openNew = () => {
+    const toggleNewCurrency = () => {
         newCurrencyDialog.value = !newCurrencyDialog.value
     }
     
@@ -70,9 +71,12 @@ const deleteSelectedCurrency = () => {
   }
 };
     
-    
+    const submitData = (data) => {
+        console.log(data);
+        
+    }
   
-    
+    const test = {code:"ee",name:"rr"}
     </script>
 
 <template>
@@ -84,7 +88,7 @@ const deleteSelectedCurrency = () => {
     <Toast />
 <Toolbar class="mb-4">
     <template #start>
-        <Button label="Ajouter une devise" icon="pi pi-plus" class="p-button-success mr-2" @click="openNew"   />
+        <Button label="Ajouter une devise" icon="pi pi-plus" class="p-button-success mr-2" @click="toggleNewCurrency"   />
         <Button label="Supprimer" icon="pi pi-trash" class="p-button-danger"  @click="toogleSelectedConfirm" :disabled="!selectedCurrency || !selectedCurrency.length"  />
     </template>
 
@@ -129,20 +133,9 @@ const deleteSelectedCurrency = () => {
 
 <!-- Modal d'ajout  -->
 <Dialog v-model:visible="newCurrencyDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
-        <div class="field">
-                <label for="code">Code</label>
-            <InputText id="code"  required="true" autofocus placeholder="Code en 3 lettre"  maxlength="3" />
-                       
-        </div>
-                    <div class="field">
-                        <label for="name">Nom</label>
-                        <InputText id="name"  required="true" placeholder="Nom de la devise"   />
-                    </div>
 
-                    <template #footer>
-                        <Button label="Annuler" icon="pi pi-times" class="p-button-text" @click="openNew"  />
-                        <Button label="Ajouter" icon="pi pi-check" class="p-button-text" />
-                    </template>
+<FormCurrencyView :on-cancel="toggleNewCurrency"  @submitForm="submitData"  :defaultvalues="test"  />
+                   
     </Dialog>
 
 </div>
