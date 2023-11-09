@@ -108,9 +108,9 @@ const deleteSelectedCurrency = () => {
                     </template>
 
     <Column selectionMode="multiple" style="width: 3rem" ></Column>
-    <Column field="id" header="ID" style="min-width:12rem"></Column>
-    <Column field="code" header="Code" style="min-width:16rem"></Column>
-    <Column field="name" header="Nom"  style="min-width:10rem"> </Column>
+    <Column field="id" header="ID" style="min-width:3rem"></Column>
+    <Column field="code" header="Code" ></Column>
+    <Column field="name" header="Nom"  > </Column>
     <Column  style="min-width:8rem">
         <template #body="rowData" >
             <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCurrency(rowData.data)" />
