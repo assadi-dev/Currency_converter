@@ -41,7 +41,7 @@ const router = createRouter({
               component: DashboardViewVue
             },
             {
-              path: 'currency',
+              path: 'currencies',
               name: 'admin-currencies',
               component: CurrencyViewVue
             },

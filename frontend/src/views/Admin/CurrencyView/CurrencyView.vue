@@ -102,10 +102,9 @@ const deleteSelectedCurrency = () => {
 
     <template #header>
         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h2 class="m-0">Gestion des Devises</h2>
-                      
-                        </div>
-                    </template>
+            <h2 class="m-0">Gestion des Devises</h2>         
+         </div>
+    </template>
 
     <Column selectionMode="multiple" style="width: 3rem" ></Column>
     <Column field="id" header="ID" style="min-width:3rem"></Column>

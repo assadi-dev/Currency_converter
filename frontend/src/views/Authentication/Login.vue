@@ -85,7 +85,7 @@ const onSubmit = async(e) => {
         const token = res.token
 
         setItem(AUTH_KEY_STORAGE,token)
-        setTimeout(()=> router.push({name:"dashboard"}),1000)
+        setTimeout(()=> router.push({name:"dashboard",replace:true}),1000)
        
         
 

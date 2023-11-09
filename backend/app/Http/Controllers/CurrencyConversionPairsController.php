@@ -20,7 +20,6 @@ class CurrencyConversionPairsController extends Controller
             return CurrencyConversionPairsRessource::collection(CurrencyConversionPair::all());
         } catch (\Throwable $th) {
             return response()->json([
-
                 'message' => $th->getMessage()
             ], 500);
         }
