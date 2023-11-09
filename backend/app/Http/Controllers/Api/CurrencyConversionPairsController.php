@@ -79,7 +79,6 @@ class CurrencyConversionPairsController extends Controller
             ], 201);
         } catch (\Throwable $th) {
             return response()->json([
-
                 'message' => $th->getMessage()
             ], 500);
         }

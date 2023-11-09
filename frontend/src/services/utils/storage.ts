@@ -25,3 +25,9 @@ export const getItem = (key: string) => {
 
     }
 }
+
+
+export const clearStorage = (key?: string) => {
+  if (key) return localStorage.removeItem(key)
+  localStorage.clear()
+}

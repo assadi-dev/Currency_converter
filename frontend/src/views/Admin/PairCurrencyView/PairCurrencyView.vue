@@ -13,9 +13,10 @@
     import { Currency,ApiCurrencySuccess } from '../../../services/types/currency.type';
     import { useFetchCurrencies } from '../../../composable/currency.composable';
     import DialogDeleteSelected from "../../../components/Dialog/DialogDeleteSelected.vue"
-
     import Toast from 'primevue/toast';
 import Dialog from 'primevue/dialog';
+import FormPairCurrencyView from './FormPairCurrencyView.vue'
+
     
     const first = ref(0);
     //const loading = ref(false);
@@ -30,7 +31,7 @@ import Dialog from 'primevue/dialog';
    const pairCurrencies = []
     
 
-    const selectedPairCurrency = ref();
+    const selectedPairCurrency = ref([]);
     const metaKey = ref(true);
     const dt = ref()
     
@@ -42,7 +43,9 @@ import Dialog from 'primevue/dialog';
     const deleteSelectedPairCurrencyDialog = ref(false)
     const newPairurrencyDialog = ref(false)
 
-    const openNew = () => {
+        const openNew = () => {
+     
+        
         newPairurrencyDialog.value = !newPairurrencyDialog.value
     }
     
@@ -55,12 +58,12 @@ import Dialog from 'primevue/dialog';
     };
 
     const toogleSelectedConfirm = () => {
-        deleteSelectedCurrencyDialog.value = !deleteSelectedCurrencyDialog.value;
+        deleteSelectedPairCurrencyDialog.value = !deleteSelectedPairCurrencyDialog.value;
     };
 const deleteSelectedCurrency = () => {
   try {
-    currencies.value.data = currencies.value.data.filter((val) => !selectedCurrency.value.includes(val));
-    deleteSelectedCurrencyDialog.value = false
+    pairCurrencies.value.data = pairCurrencies.value.data.filter((val) => !selectedPairCurrency.value.includes(val));
+    deleteSelectedPairCurrencyDialog.value = false
      toast.add({ severity: 'success', summary: 'Opération réussie', detail: 'Devise supprimé', life: 3000 });
   } catch (error) {
     toast.add({ severity: 'error', summary: `Echec de l'opération`, detail: 'La devise pas pu etre supprimé', life: 5000 });
@@ -68,8 +71,11 @@ const deleteSelectedCurrency = () => {
   }
 };
     
-    
   
+        const getCode = (value:string) => {
+    console.log(value);
+    
+  }
     
     </script>
 
@@ -79,7 +85,7 @@ const deleteSelectedCurrency = () => {
     <div  class="col-12 mx-auto">
 
 
-<div class="card" v-if="!isLoading" >
+<div class="card" >
     <Toast />
 <Toolbar class="mb-4">
     <template #start>
@@ -129,22 +135,18 @@ const deleteSelectedCurrency = () => {
 </Dialog>            
 
 <!-- Modal d'ajout  -->
-<Dialog  :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
-        <div class="field">
-                <label for="code">Code</label>
-            <InputText id="code"  required="true" autofocus placeholder="Code en 3 lettre"  maxlength="3" />
-                       
-        </div>
-                    <div class="field">
-                        <label for="name">Nom</label>
-                        <InputText id="name"  required="true" placeholder="Nom de la devise"   />
-                    </div>
 
-                    <template #footer>
-                        <Button label="Annuler" icon="pi pi-times" class="p-button-text"  />
-                        <Button label="Ajouter" icon="pi pi-check" class="p-button-text" />
-                    </template>
-    </Dialog>
+<Dialog  v-model:visible="newPairurrencyDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
+
+
+        <FormPairCurrencyView @code="getCode"  />
+
+
+
+</Dialog>
+
+
+
 
 </div>
 

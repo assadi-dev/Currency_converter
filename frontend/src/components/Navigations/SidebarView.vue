@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LogoutBtn from './LogoutBtn.vue';
 import MenuItem from './MenuItem.vue';
 
 const sidebarRoutes = [
@@ -32,8 +33,10 @@ const sidebarRoutes = [
        <template v-for="item in sidebarRoutes" :key="item.name" >
         <MenuItem :item="item"   />
     </template>
-
         
+    </li>
+    <li class="layout-root-menuitem">
+        <LogoutBtn />
     </li>
 </ul>
 
