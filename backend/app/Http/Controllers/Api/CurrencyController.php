@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Currency;
 use Illuminate\Http\Request;
 use App\Http\Resources\CurrencyRessource;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class CurrencyController extends Controller
 {

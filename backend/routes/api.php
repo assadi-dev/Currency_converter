@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\CurrencyController;
-use App\Http\Controllers\CurrencyConversionPairsController;
-use App\Http\Controllers\CurrencyConverterController;
+use App\Http\Controllers\Api\CurrencyController;
+use App\Http\Controllers\Api\CurrencyConversionPairsController;
+use App\Http\Controllers\Api\CurrencyConverterController;
 
 /*
 |--------------------------------------------------------------------------

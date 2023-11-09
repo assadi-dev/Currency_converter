@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\CurrencyConversionPair;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CurrencyConversionPairsRessource;
+use App\Http\Controllers\Controller;
 
 class CurrencyConversionPairsController extends Controller
 {
@@ -47,7 +48,6 @@ class CurrencyConversionPairsController extends Controller
 
             if($validateUser->fails()) {
                 return response()->json([
-
                     'message' => $validateUser->errors()
                 ], 400);
             }
