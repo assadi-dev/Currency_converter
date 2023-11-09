@@ -46,10 +46,10 @@ import Dialog from 'primevue/dialog';
     //Affichage des modal
     const deleteCurrencyDialog = ref(false)
     const deleteSelectedCurrencyDialog = ref(false)
-    const newCurrencyDialog = ref(false)
+    const newPairurrencyDialog = ref(false)
 
     const openNew = () => {
-        newCurrencyDialog.value = !newCurrencyDialog.value
+        newPairurrencyDialog.value = !newPairurrencyDialog.value
     }
     
     const editProduct = (currency) => {

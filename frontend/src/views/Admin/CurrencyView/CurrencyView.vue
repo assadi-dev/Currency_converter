@@ -48,7 +48,7 @@ import Dialog from 'primevue/dialog';
         newCurrencyDialog.value = !newCurrencyDialog.value
     }
     
-    const editProduct = (currency) => {
+    const editCurrency = (currency) => {
        console.log(currency);  
     }
 
@@ -113,7 +113,7 @@ const deleteSelectedCurrency = () => {
     <Column field="name" header="Nom"  style="min-width:10rem"> </Column>
     <Column  style="min-width:8rem">
         <template #body="rowData" >
-            <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProduct(rowData.data)" />
+            <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCurrency(rowData.data)" />
             <Button icon="pi pi-trash" outlined rounded severity="danger" @click="toogleDeleteConfirm(rowData.data)"  />
         </template>
     </Column>
