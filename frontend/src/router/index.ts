@@ -42,12 +42,12 @@ const router = createRouter({
             },
             {
               path: 'currency',
-              name: 'admin-currency',
+              name: 'admin-currencies',
               component: CurrencyViewVue
             },
             {
-              path: 'currency-pairs',
-              name: 'admin-currency-pairs',
+              path: 'pair-currencies',
+              name: 'admin-pair-currency',
               component: PairCurrencyViewVue
             },
           ]

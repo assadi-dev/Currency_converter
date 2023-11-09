@@ -1,5 +1,4 @@
-<template>
-    <div>
+
         <script setup lang="ts">
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
@@ -30,22 +29,17 @@ import Dialog from 'primevue/dialog';
 
    const pairCurrencies = []
     
-    
-/*     const currenciesCollections = computed<ApiCurrencySuccess| null>(() => {
-        const { data } = currencies.value
-        return data
-    }) */
-    
+
     const selectedPairCurrency = ref();
     const metaKey = ref(true);
     const dt = ref()
     
-    
-    //Crud 
+       //Crud operations
+ 
 
     //Affichage des modal
-    const deleteCurrencyDialog = ref(false)
-    const deleteSelectedCurrencyDialog = ref(false)
+    const deletePairCurrencyDialog = ref(false)
+    const deleteSelectedPairCurrencyDialog = ref(false)
     const newPairurrencyDialog = ref(false)
 
     const openNew = () => {
@@ -80,6 +74,7 @@ const deleteSelectedCurrency = () => {
     </script>
 
 <template>
+
     <div class="grid">
     <div  class="col-12 mx-auto">
 
@@ -106,7 +101,7 @@ const deleteSelectedCurrency = () => {
 
     <template #header>
         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h2 class="m-0">Gestion des Devises</h2>            
+            <h2 class="m-0">Gestion des Taux de conversions</h2>            
         </div>
     </template>
 
@@ -116,8 +111,8 @@ const deleteSelectedCurrency = () => {
     <Column field="name" header="Nom"  style="min-width:10rem"> </Column>
     <Column  style="min-width:8rem">
         <template #body="rowData" >
-            <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProduct(rowData.data)" />
-            <Button icon="pi pi-trash" outlined rounded severity="danger" @click="toogleDeleteConfirm(rowData.data)"  />
+            <Button icon="pi pi-pencil" outlined rounded class="mr-2" />
+            <Button icon="pi pi-trash" outlined rounded severity="danger"   />
         </template>
     </Column>
 </DataTable>
@@ -126,13 +121,13 @@ const deleteSelectedCurrency = () => {
 <Dialog v-model:visible="deleteSelectedCurrencyDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
     <DialogDeleteSelected message="Etes vous sur de vouloir suprimé les devises selectionné ?" />
     <template #footer>
-        <Button label="Non" icon="pi pi-times" class="p-button-text" @click="toogleSelectedConfirm" />
-        <Button label="Oui" icon="pi pi-check" class="p-button-text" @click="deleteSelectedCurrency" />
+        <Button label="Non" icon="pi pi-times" class="p-button-text" />
+        <Button label="Oui" icon="pi pi-check" class="p-button-text"/>
     </template>
 </Dialog>            
 
 <!-- Modal d'ajout  -->
-<Dialog v-model:visible="newCurrencyDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
+<Dialog  :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
         <div class="field">
                 <label for="code">Code</label>
             <InputText id="code"  required="true" autofocus placeholder="Code en 3 lettre"  maxlength="3" />
@@ -144,7 +139,7 @@ const deleteSelectedCurrency = () => {
                     </div>
 
                     <template #footer>
-                        <Button label="Annuler" icon="pi pi-times" class="p-button-text" @click="openNew"  />
+                        <Button label="Annuler" icon="pi pi-times" class="p-button-text"  />
                         <Button label="Ajouter" icon="pi pi-check" class="p-button-text" />
                     </template>
     </Dialog>
@@ -160,13 +155,4 @@ const deleteSelectedCurrency = () => {
 
 </style>
 
-    </div>
-</template>
 
-<script setup lang="ts">
-
-</script>
-
-<style scoped>
-
-</style>
