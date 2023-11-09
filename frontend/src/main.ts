@@ -6,6 +6,8 @@ import ToastService from 'primevue/toastservice';
 import router from './router';
 import "primevue/resources/themes/saga-blue/theme.css"
 import 'primeflex/primeflex.css'
+import 'primeicons/primeicons.css'
+
 
 
 
