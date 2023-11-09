@@ -18,17 +18,27 @@ const {errors, defineInputBinds, handleSubmit } = useForm({
     validationSchema:PairCurrencyForm
 });
 
-const codeFromCurrency = defineInputBinds("codeFromCurrency")
 
 
-const emit = defineEmits(["code"])
+
+const emit = defineEmits(["formValues"])
 
 const props = defineProps<FormPropsType>()
 
-watch(codeFromCurrency, async codeFromCurrency => {
+    const idFromCurrency= defineInputBinds("idFromCurrency")
+    const codeFromCurrency= defineInputBinds("codeFromCurrency")
+    const nameFromCurrency= defineInputBinds("nameFromCurrency")
+    const idToCurrency= defineInputBinds("idToCurrency")
+    const codeToCurrency= defineInputBinds("codeToCurrency")
+    const nameToCurrency= defineInputBinds("nameToCurrency")
+    const exchange_rate= defineInputBinds("exchange_rate")
 
-    emit("code",codeFromCurrency)
-})
+
+/*  watch(formValues, async formValues => {
+console.log(formValues);
+
+    emit("formValues",formValues)
+})  */
 
 
 const save = handleSubmit(values => {
@@ -43,14 +53,31 @@ const save = handleSubmit(values => {
 
         <form @submit="save" >
             <div class="field">
-            <label for="codeFromCurrency">Code</label>
-            <InputText :class="errors.codeFromCurrency && 'p-invalid'"  v-bind="codeFromCurrency" id="codeFromCurrency" name="codeFromCurrency"  autofocus placeholder="Code en 3 lettre" maxlength="3" />
-<InlineMessage severity="error"  v-if="errors.codeFromCurrency">{{ errors.codeFromCurrency }}</InlineMessage>
+                <label for="codeFromCurrency">Code devise entrant</label>
+                <InputText :class="errors.codeFromCurrency && 'p-invalid'"  v-bind="codeFromCurrency" id="codeFromCurrency" name="codeFromCurrency"  autofocus placeholder="EX: EUR, GBR, "  />
+                <small class="p-error" id="codeFromCurrency">{{ errors.codeFromCurrency || '&nbsp;' }}</small>
+            </div>
+        <div class="field">
+            <label for="nameFromCurrency">Nom devise entrant</label>
+            <InputText v-bind="nameFromCurrency" id="nameFromCurrency" name="nameFromCurrency"  placeholder="Nom de la devise entrant" />
+            <small class="p-error" id="nameFromCurrency">{{ errors.nameFromCurrency || '&nbsp;' }}</small>
+        </div>
+            <div class="field">
+                <label for="codeToCurrency">Code devise sortant</label>
+                <InputText :class="errors.codeToCurrency && 'p-invalid'"  v-bind="codeToCurrency" id="codeToCurrency" name="codeToCurrency"  autofocus placeholder="EX: EUR, GBR, "  />
+                <small class="p-error" id="codeToCurrency">{{ errors.codeToCurrency || '&nbsp;' }}</small>
+            </div>
+        <div class="field">
+            <label for="nameToCurrency">Nom devise sortant</label>
+            <InputText v-bind="nameToCurrency" id="nameToCurrency" nam="nameToCurrency"  placeholder="Nom de la devise sortant" />
+            <small class="p-error" id="nameToCurrency">{{ errors.nameToCurrency || '&nbsp;' }}</small>
 
         </div>
         <div class="field">
-            <label for="name">Nom</label>
-            <InputText id="name"  placeholder="Nom de la devise" />
+            <label for="exchange_rate">Taux d'echange</label>
+            <InputText v-bind="exchange_rate" id="exchange_rate" name="exchange_rate"  placeholder="0.00000" />
+            <small class="p-error" id="texchange_rate">{{ errors.exchange_rate || '&nbsp;' }}</small>
+
         </div>
 
         <div class="p-dialog-footer py-3" >
