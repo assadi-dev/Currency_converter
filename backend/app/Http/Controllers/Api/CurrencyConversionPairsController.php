@@ -7,9 +7,17 @@ use App\Models\CurrencyConversionPair;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CurrencyConversionPairsRessource;
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 
 class CurrencyConversionPairsController extends Controller
 {
+    private $currencies;
+
+    public function __construct(Currency $currencies)
+    {
+        $this->currencies = $currencies;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -83,6 +91,95 @@ class CurrencyConversionPairsController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Store a newly created resource in storage by code currency.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeByCode(Request $request)
+    {
+        try {
+            //Validation
+            /*      $validateUser = Validator::make(
+                    $request->all(),
+                     [
+                        'codeFromCurrency' => 'required',
+                        'nameFromCurrency' => 'required',
+                        'codeToCurrency' => 'required',
+                        'nameToCurrency' => 'required',
+                        'exchange_rate' => 'required'
+                    ]
+                 ); */
+
+            $codeFromCurrency = $request->codeFromCurrency;
+            $nameFromCurrency = $request->nameFromCurrency;
+            $codeToCurrency = $request->codeToCurrency;
+            $nameToCurrency = $request->nameToCurrency;
+            $exchange_rate = $request->exchange_rate;
+
+            //initialisation de la paire
+            $newPaireCurrency = new CurrencyConversionPair();
+
+            //Vérification de l'existence de la devise dans la Base de donnée
+            $findFromCurrency = $this->currencies->findByCode($codeFromCurrency);
+            $findToCurrency = $this->currencies->findByCode($codeToCurrency);
+            $from_currency_id = null;
+            $to_currency_id = null;
+
+
+
+            if(isset($findFromCurrency)) {
+                $from_currency_id =  $findFromCurrency->id ;
+            } else {
+                $findFromCurrency = Currency::create([
+                    'code' => $codeFromCurrency,
+                    'name' => $nameFromCurrency,
+                ]);
+                $from_currency_id =  $findFromCurrency->id ;
+            }
+            if(isset($findFromCurrency)) {
+                $to_currency_id = $findToCurrency->id;
+            } else {
+                $findToCurrency = Currency::create([
+                    'code' => $codeToCurrency,
+                    'name' => $nameToCurrency,
+                ]);
+                $to_currency_id = $findToCurrency->id;
+
+            }
+
+            /*            $newPaireCurrency::create([
+                           'from_currency_id' => $from_currency_id,
+                           'to_currency_id' => $to_currency_id,
+                           'exchange_rate' => $exchange_rate,
+                       ]);
+            */
+            dd(
+                $from_currency_id,
+                $to_currency_id
+            );
+
+            $pairCurrency = [
+               "codeFromCurrency" => $codeFromCurrency,
+                "nameFromCurrency" => $nameFromCurrency,
+                "codeToCurrency" =>  $codeToCurrency,
+                "nameToCurrency" => $nameToCurrency,
+                "exchange_rate" => $exchange_rate,
+                "count" => 0
+            ];
+
+            return response()->json([ 'message' => 'Paire de conversion crée',"data" => $pairCurrency], 201);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            $message = $th->getMessage();
+            return response()->json(["message" => $message], 500);
+        }
+    }
+
+
 
     /**
      * Display the specified resource.

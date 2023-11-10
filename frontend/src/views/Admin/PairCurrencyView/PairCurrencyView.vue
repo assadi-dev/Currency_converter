@@ -114,10 +114,12 @@ const deleteSelectedCurrency = () => {
 
     <Column selectionMode="multiple" style="width: 3rem" ></Column>
     <Column field="id" header="ID" style="min-width:3rem"></Column>
-    <Column field="code" header="Devise entrant" style="min-width:5rem" ></Column>
-    <Column field="name" header="Devise sortant" style="min-width:5rem" > </Column>
-    <Column field="name" header="Taux" > </Column>
-    <Column field="id" header="Nombre d'utilisation" ></Column>
+    <Column field="codeFromCurrency" header="Code Devise entrant" style="min-width:5rem" ></Column>
+    <Column field="nameFromCurrency" header="Devise entrant" style="min-width:5rem" ></Column>
+    <Column field="codeToCurrency" header="Code Devise sortant" style="min-width:5rem" ></Column>
+    <Column field="nameToCurrency" header="Devise sortant" style="min-width:5rem" > </Column>
+    <Column field="exchange_rate" header="Taux" > </Column>
+    <Column field="count" header="Nombre d'utilisation" ></Column>
     <Column  style="min-width:5rem">
         <template #body="rowData" >
             <Button icon="pi pi-pencil" outlined rounded class="mr-2" />
