@@ -9,7 +9,9 @@ export type PairCurrencyType = {
 };
 
 export type ApiPairCurrencySuccess = {
-  data: PairCurrencyType[];
+  data: PairCurrencyType[] ;
 };
 
-export type PairCurrencyTypeWithoutId = Omit<PairCurrencyType,"id">
+export type PairCurrencyTypeWithoutId = Omit<PairCurrencyType, "id">
+
+

@@ -34,17 +34,8 @@ const props = defineProps<FormPropsType>()
     const exchange_rate= defineInputBinds("exchange_rate")
 
 
-/*  watch(formValues, async formValues => {
-console.log(formValues);
-
-    emit("formValues",formValues)
-})  */
-
-
 const save = handleSubmit(values => {
-    //console.log(values);
     emit("formValues",values)
-    //props.onSubmit
 })
 
 </script>
@@ -54,7 +45,7 @@ const save = handleSubmit(values => {
         <form @submit="save" >
             <div class="field">
                 <label for="codeFromCurrency">Code devise entrant</label>
-                <InputText :class="errors.codeFromCurrency && 'p-invalid'"  v-bind="codeFromCurrency" id="codeFromCurrency" name="codeFromCurrency"  autofocus placeholder="EX: EUR, GBR, "  />
+                <InputText :class="errors.codeFromCurrency && 'p-invalid'"  v-bind="codeFromCurrency" id="codeFromCurrency" name="codeFromCurrency"   placeholder="EX: EUR, GBR, "  />
                 <small class="p-error" id="codeFromCurrency">{{ errors.codeFromCurrency || '&nbsp;' }}</small>
             </div>
         <div class="field">
@@ -64,7 +55,7 @@ const save = handleSubmit(values => {
         </div>
             <div class="field">
                 <label for="codeToCurrency">Code devise sortant</label>
-                <InputText :class="errors.codeToCurrency && 'p-invalid'"  v-bind="codeToCurrency" id="codeToCurrency" name="codeToCurrency"  autofocus placeholder="EX: EUR, GBR, "  />
+                <InputText :class="errors.codeToCurrency && 'p-invalid'"  v-bind="codeToCurrency" id="codeToCurrency" name="codeToCurrency"   placeholder="EX: EUR, GBR, "  />
                 <small class="p-error" id="codeToCurrency">{{ errors.codeToCurrency || '&nbsp;' }}</small>
             </div>
         <div class="field">

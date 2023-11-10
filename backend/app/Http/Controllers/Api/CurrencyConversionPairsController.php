@@ -162,6 +162,7 @@ class CurrencyConversionPairsController extends Controller
 
 
             $pairCurrency = [
+                "id" => $newPaireCurrency->id,
                "codeFromCurrency" => $newPaireCurrency->fromCurrency->code,
                 "nameFromCurrency" =>  $newPaireCurrency->fromCurrency->name,
                 "codeToCurrency" =>  $newPaireCurrency->toCurrency->code,
