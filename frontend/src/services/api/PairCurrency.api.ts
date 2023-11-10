@@ -2,24 +2,28 @@
 import { AxiosError, AxiosResponse } from "axios"
 import { PairCurrencyFormValue } from "../types/Form.types"
 import { PairCurrencyForm, PairCurrencyType } from "../types/pairCurrency.type"
-import { instance } from "./instance"
+import { adminInstance } from "./instance.tsx"
 
 
 export const fetchAll = () => {
-   return instance.get("/currency_convert_pairs")
+   return adminInstance.get("/currency_convert_pairs")
 }
 export const fetchOne = (id:string) => {
-   return instance.get(`/currency_convert_pairs/${id}`)
+   return adminInstance.get(`/currency_convert_pair/${id}`)
 }
 
-export const add = async (data:PairCurrencyFormValue):Promise<ApiPairCurrencySuccessAdd> => {
+export const add = (data:PairCurrencyFormValue):Promise<ApiPairCurrencySuccessAdd> => {
 
-   return await instance.post(`/currency_convert_pairs/code`, data)
+   return adminInstance.post(`/currency_convert_pair/code`, data)
 
  }
 
 export const update = (id:string,data:PairCurrencyFormValue) => {
-   return instance.put(`/currency_convert_pairs/${id}`,data)
+   return adminInstance.put(`/currency_convert_pair/${id}`,data)
+}
+
+export const remove = async (id: string) => {
+   return adminInstance.delete(`/currency_convert_pair/${id}`)
 }
 
 export type APISuccess = {

@@ -11,7 +11,7 @@ import DialogDeleteSelected from "../../../components/Dialog/DialogDeleteSelecte
 import Toast from 'primevue/toast';
 import Dialog from 'primevue/dialog';
 import FormPairCurrencyView from './FormPairCurrencyView.vue'
-import { ApiPairCurrencySuccess } from "../../../services/types/pairCurrency.type";
+import { ApiPairCurrencySuccess ,PairCurrencyType} from "../../../services/types/pairCurrency.type";
 import * as PairCurencyApi from "../../../services/api/PairCurrency.api"
 import { PairCurrencyFormValue } from "../../../services/types/Form.types"
 import * as PairDialogMessage from "../../../services/dialogmessage/PairCurrency"
@@ -50,7 +50,8 @@ const deleteMessage = ref<string>("")
 
 
 
-//Crud operations
+//state des element selectionnées
+const statePaireCurrency = ref<Omit<PairCurrencyType,"count">>()
 
 
 //Affichage des modal
@@ -62,34 +63,54 @@ const openNew = () => {
     newPairurrencyDialog.value = !newPairurrencyDialog.value
 }
 
-const editProduct = (currency) => {
-    console.log(currency);
+const editProduct = (paiCurrency) => {
+    console.log(paiCurrency);
 }
 
-const toogleDeleteConfirm = (pairCurrency) => {
-    console.log(pairCurrency);
-
+const toogleDeleteConfirm = (pairCurrency:Omit<PairCurrencyType,"count">) => {
+  
     deletePairCurrencyDialog.value = !deletePairCurrencyDialog.value;
+    statePaireCurrency.value = pairCurrency
     deleteMessage.value = `Etes vous sur de vouloir suprimé la pair ${pairCurrency.codeFromCurrency}-${pairCurrency.nameFromCurrency} vers ${pairCurrency.codeToCurrency}-${pairCurrency.nameToCurrency}  ?`
 };
 
 const toogleSelectedConfirm = () => {
     deleteSelectedPairCurrencyDialog.value = !deleteSelectedPairCurrencyDialog.value;
 };
+
+/** suppression multiple */
 const deleteSelectedCurrency = () => {
     try {
         pairCurrencies.value.data = pairCurrencies.value.data.filter((val) => !selectedPairCurrency.value.includes(val));
         deleteSelectedPairCurrencyDialog.value = false
-        toast.add({ severity: 'success', summary: 'Opération réussie', detail: 'Devise supprimé', life: 3000 });
+        toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS , detail: PairDialogMessage.DELETE_SELECTED_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
-      
-        
-        toast.add({ severity: 'error', summary: `Echec de l'opération`, detail: 'La devise pas pu etre supprimé', life: 5000 });
-
+        toast.add({ severity: 'error', summary:PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_SELECTED_PAIR_FAILED, life: 5000 });
     }
 };
 
+/** suppression d'une seul element **/
+const deletePairCurrency = async () => {
+try {
+    const id = statePaireCurrency.value?.id
+    await PairCurencyApi.remove(id)
+    console.log(pairCurrencies?.value?.data);
 
+    const itemRemoved = [...pairCurrencies?.value?.data]?.filter(val => val?.id != id)
+    pairCurrencies.value.data = itemRemoved
+
+    toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.DELETE_PAIR_SUCCESS, life: 3000 });
+
+} catch (error) {
+    toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_PAIR_FAILED, life: 3000 });
+}
+finally {
+    deletePairCurrencyDialog.value = false
+}
+    
+    
+}
+/**Envoie les donnée vers le serveur**/
 const postFormValues = async (values: PairCurrencyFormValue) => {
     try {
         const res = await PairCurencyApi.add(values)
@@ -99,7 +120,7 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
         pairCurrencies?.value?.data.push(pair)
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.ADD_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
-        console.log(error.message);
+
         toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.ADD_PAIR_FAILED, life: 3000 });
     } finally {
         newPairurrencyDialog.value = false
@@ -147,7 +168,7 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
                     <Column field="count" header="Nombre d'utilisation"></Column>
                     <Column style="min-width:5rem">
                         <template #body="rowData">
-                            <Button icon="pi pi-pencil" outlined rounded class="mr-2" />
+                            <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="deleteSelectedCurrency(rowData.data)"  />
                             <Button icon="pi pi-trash" outlined rounded severity="danger"
                                 @click="toogleDeleteConfirm(rowData.data)" />
                         </template>
@@ -169,8 +190,8 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
                     :modal="true">
                     <DialogDeleteSelected :message="deleteMessage" />
                     <template #footer>
-                        <Button label="Non" icon="pi pi-times" class="p-button-text" />
-                        <Button label="Oui" icon="pi pi-check" class="p-button-text" />
+                        <Button label="Non" icon="pi pi-times" class="p-button-text" @click="toogleDeleteConfirm" />
+                        <Button label="Oui" icon="pi pi-check" class="p-button-text" @click="deletePairCurrency" />
                     </template>
                 </Dialog>
 
