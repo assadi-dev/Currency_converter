@@ -17,7 +17,7 @@ class CreateCurrencyConversionPairsTable extends Migration
             $table->id();
             $table->foreignId('from_currency_id')->constrained('currencies');
             $table->foreignId('to_currency_id')->constrained('currencies');
-            $table->decimal('exchange_rate', 8, 2);
+            $table->decimal('exchange_rate', 8, 5);
             $table->timestamps();
         });
     }

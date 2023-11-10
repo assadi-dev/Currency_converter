@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCountToCurrencyConversionPairs extends Migration
+class AddPrimaryKey extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,9 @@ class AddCountToCurrencyConversionPairs extends Migration
     public function up()
     {
         Schema::table('currency_conversion_pairs', function (Blueprint $table) {
-            $table->integer('count')->after('exchange_rate')->default(0);
+            $table->unique(['from_currency_id','to_currency_id']);
+
+
         });
     }
 
@@ -26,8 +28,7 @@ class AddCountToCurrencyConversionPairs extends Migration
     public function down()
     {
         Schema::table('currency_conversion_pairs', function (Blueprint $table) {
-
-            $table->dropColumn('count');
+            //
         });
     }
 }

@@ -14,12 +14,14 @@ class CurrencyConversionPairsRessource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray([
+        return [
             "id" => $this->id,
-            "from_currency" => ["code" => $this->fromCurrency->code,"name" => $this->fromCurrency->code],
-            "to_currency" => ["code" => $this->toCurrency->code,"name" => $this->toCurrency->code],
+            "codeFromCurrency" => $this->fromCurrency->code,
+            "nameFromCurrency" => $this->fromCurrency->name,
+            "codeToCurrency" =>  $this->toCurrency->code,
+            "nameToCurrency" => $this->toCurrency->name,
             "exchange_rate" => $this->exchange_rate,
             "count" => $this->count
-        ]);
+        ];
     }
 }

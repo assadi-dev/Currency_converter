@@ -40,8 +40,8 @@ class CurrencyConversionPair extends Model
         ->selectRaw("currency_conversion_pairs.id,currencies.code as from_currency, toCurrency.code as to_currency ,exchange_rate")
         ->leftJoin('currencies', "currencies.id", '=', "currency_conversion_pairs.from_currency_id")
          ->leftJoin('currencies as toCurrency', "toCurrency.id", '=', "currency_conversion_pairs.to_currency_id")
-         ->whereRaw('currencies.code = ?', [$from_currency])
-         ->whereRaw('toCurrency.code = ?', [$to_currency])
+         ->whereRaw('currencies.code = ?', $from_currency)
+         ->whereRaw('toCurrency.code = ?', $to_currency)
         ->get()
         ;
 

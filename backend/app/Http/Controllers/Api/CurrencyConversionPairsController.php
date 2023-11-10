@@ -26,7 +26,7 @@ class CurrencyConversionPairsController extends Controller
     public function index()
     {
         try {
-            return CurrencyConversionPairsRessource::collection(CurrencyConversionPair::all());
+            return CurrencyConversionPairsRessource::collection(CurrencyConversionPair::paginate(5));
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()
@@ -102,16 +102,16 @@ class CurrencyConversionPairsController extends Controller
     {
         try {
             //Validation
-            /*      $validateUser = Validator::make(
-                    $request->all(),
-                     [
-                        'codeFromCurrency' => 'required',
-                        'nameFromCurrency' => 'required',
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                        'codeFromCurrency' => 'required|unique:Currency',
+                        'nameFromCurrency' => 'required|unique:Currency',
                         'codeToCurrency' => 'required',
                         'nameToCurrency' => 'required',
                         'exchange_rate' => 'required'
                     ]
-                 ); */
+            );
 
             $codeFromCurrency = $request->codeFromCurrency;
             $nameFromCurrency = $request->nameFromCurrency;
@@ -128,46 +128,46 @@ class CurrencyConversionPairsController extends Controller
             $from_currency_id = null;
             $to_currency_id = null;
 
-
-
-            if(isset($findFromCurrency)) {
+            if(!empty($findFromCurrency)) {
                 $from_currency_id =  $findFromCurrency->id ;
             } else {
                 $findFromCurrency = Currency::create([
-                    'code' => $codeFromCurrency,
-                    'name' => $nameFromCurrency,
-                ]);
+                   'code' => $codeFromCurrency,
+                   'name' => $nameFromCurrency,
+                    ]);
                 $from_currency_id =  $findFromCurrency->id ;
             }
-            if(isset($findFromCurrency)) {
+            if(!empty($findToCurrency)) {
                 $to_currency_id = $findToCurrency->id;
+
             } else {
                 $findToCurrency = Currency::create([
-                    'code' => $codeToCurrency,
-                    'name' => $nameToCurrency,
-                ]);
+                   'code' => $codeToCurrency,
+                   'name' => $nameToCurrency,
+                     ]);
                 $to_currency_id = $findToCurrency->id;
 
             }
 
-            /*            $newPaireCurrency::create([
-                           'from_currency_id' => $from_currency_id,
-                           'to_currency_id' => $to_currency_id,
-                           'exchange_rate' => $exchange_rate,
-                       ]);
-            */
-            dd(
-                $from_currency_id,
-                $to_currency_id
-            );
+
+            $newPaireCurrency = new CurrencyConversionPair();
+
+
+            $newPaireCurrency->from_currency_id = $from_currency_id;
+            $newPaireCurrency->to_currency_id = $to_currency_id;
+            $newPaireCurrency->exchange_rate = $exchange_rate ;
+            $newPaireCurrency->count = 0;
+            $newPaireCurrency->save();
+
+
 
             $pairCurrency = [
-               "codeFromCurrency" => $codeFromCurrency,
-                "nameFromCurrency" => $nameFromCurrency,
-                "codeToCurrency" =>  $codeToCurrency,
-                "nameToCurrency" => $nameToCurrency,
-                "exchange_rate" => $exchange_rate,
-                "count" => 0
+               "codeFromCurrency" => $newPaireCurrency->fromCurrency->code,
+                "nameFromCurrency" =>  $newPaireCurrency->fromCurrency->name,
+                "codeToCurrency" =>  $newPaireCurrency->toCurrency->code,
+                "nameToCurrency" =>  $newPaireCurrency->toCurrency->name,
+                "exchange_rate" =>  $newPaireCurrency->exchange_rate,
+                "count" => $newPaireCurrency->count
             ];
 
             return response()->json([ 'message' => 'Paire de conversion crée',"data" => $pairCurrency], 201);
@@ -226,8 +226,7 @@ class CurrencyConversionPairsController extends Controller
                 ], 404);
             }
 
-            $currencyConversionPair->from_currency_id = $request->from_currency_id;
-            $currencyConversionPair->to_currency_id = $request->to_currency_id;
+
             $currencyConversionPair->exchange_rate = $request->exchange_rate;
             $currencyConversionPair->update();
 
