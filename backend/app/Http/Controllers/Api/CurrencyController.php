@@ -52,7 +52,7 @@ class CurrencyController extends Controller
                 ], 400);
             }
             $codeCurrency = trim(strtoupper($request->code));
-            $nameCurrency = trim(ucwords($request->name));
+            $nameCurrency = trim(ucfirst($request->name));
 
             $currency = Currency::create([
                 'code' => $codeCurrency,
@@ -138,14 +138,12 @@ class CurrencyController extends Controller
             }
 
             $codeCurrency = trim(strtoupper($request->code));
-            $nameCurrency = trim(ucwords($request->name));
+            $nameCurrency = trim(ucfirst($request->name));
 
 
             $currency->code =  $codeCurrency;
             $currency->name =   $nameCurrency;
             $currency->update();
-
-
 
 
             return response()->json([

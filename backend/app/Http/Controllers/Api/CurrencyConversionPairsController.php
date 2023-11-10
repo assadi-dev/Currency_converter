@@ -114,9 +114,9 @@ class CurrencyConversionPairsController extends Controller
             );
 
             $codeFromCurrency = trim(strtoupper($request->codeFromCurrency));
-            $nameFromCurrency = trim(ucwords($request->nameFromCurrency));
+            $nameFromCurrency = trim(ucfirst($request->nameFromCurrency));
             $codeToCurrency = trim(strtoupper($request->codeToCurrency));
-            $nameToCurrency = trim(ucwords($request->nameToCurrency));
+            $nameToCurrency = trim(ucfirst($request->nameToCurrency));
             $exchange_rate = trim($request->exchange_rate);
 
             //initialisation de la paire
