@@ -42,8 +42,8 @@ console.log(formValues);
 
 
 const save = handleSubmit(values => {
-    console.log(values);
-    
+    //console.log(values);
+    emit("formValues",values)
     //props.onSubmit
 })
 

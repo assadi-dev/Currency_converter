@@ -28,7 +28,7 @@ import FormPairCurrencyView from './FormPairCurrencyView.vue'
     //Fetching des devises vers le serveur
    // const {isLoading,currencies,error}=  useFetchCurrencies()
 
-   const pairCurrencies = []
+   const pairCurrencies = ref([])
     
 
     const selectedPairCurrency = ref([]);
@@ -72,8 +72,9 @@ const deleteSelectedCurrency = () => {
 };
     
   
-        const getCode = (value:string) => {
-    console.log(value);
+        const postFormValues = (values:any) => {
+                    console.log(values);
+    pairCurrencies.value.push(values)
     
   }
     
@@ -139,7 +140,7 @@ const deleteSelectedCurrency = () => {
 <Dialog  v-model:visible="newPairurrencyDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
 
 
-        <FormPairCurrencyView @code="getCode"  />
+        <FormPairCurrencyView @form-values="postFormValues"  />
 
 
 
