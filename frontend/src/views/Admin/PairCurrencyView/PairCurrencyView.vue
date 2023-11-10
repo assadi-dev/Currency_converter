@@ -74,9 +74,9 @@ const deleteSelectedCurrency = () => {
   
         const postFormValues = (values:any) => {
                     console.log(values);
-    pairCurrencies.value.push(values)
+                pairCurrencies.value.push(values)
     
-  }
+        }
     
     </script>
 
