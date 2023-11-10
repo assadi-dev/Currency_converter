@@ -27,8 +27,6 @@ class AddPrimaryKey extends Migration
      */
     public function down()
     {
-        Schema::table('currency_conversion_pairs', function (Blueprint $table) {
-            //
-        });
+        Schema::table('currency_conversion_pairs', function (Blueprint $table) {});
     }
 }
