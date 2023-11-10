@@ -113,10 +113,10 @@ class CurrencyConversionPairsController extends Controller
                     ]
             );
 
-            $codeFromCurrency = $request->codeFromCurrency;
-            $nameFromCurrency = $request->nameFromCurrency;
-            $codeToCurrency = $request->codeToCurrency;
-            $nameToCurrency = $request->nameToCurrency;
+            $codeFromCurrency = strtoupper($request->codeFromCurrency);
+            $nameFromCurrency = ucwords($request->nameFromCurrency);
+            $codeToCurrency = strtoupper($request->codeToCurrency);
+            $nameToCurrency = ucwords($request->nameToCurrency);
             $exchange_rate = $request->exchange_rate;
 
             //initialisation de la paire
@@ -233,13 +233,19 @@ class CurrencyConversionPairsController extends Controller
             $currencyConversionPair->exchange_rate = $request->exchange_rate;
             $currencyConversionPair->update();
 
-            return response()->json([
-                'message' => 'Paire de conversion modifié',
+
+            $pairCurrency = [
                 "id" => $currencyConversionPair->id,
-                'from_currency' => $currencyConversionPair->fromCurrency,
-                'to_currency' => $currencyConversionPair->toCurrency,
-                'exchange_rate' => $currencyConversionPair->exchange_rate
-            ], 200);
+               "codeFromCurrency" => $currencyConversionPair->fromCurrency->code,
+                "nameFromCurrency" =>  $currencyConversionPair->fromCurrency->name,
+                "codeToCurrency" =>  $currencyConversionPair->toCurrency->code,
+                "nameToCurrency" =>  $currencyConversionPair->toCurrency->name,
+                "exchange_rate" =>  $currencyConversionPair->exchange_rate,
+                "count" => $currencyConversionPair->count
+            ];
+
+            return response()->json([ 'message' => 'Paire de conversion crée',"data" => $pairCurrency], 201);
+
 
         } catch (\Throwable $th) {
             return response()->json([
