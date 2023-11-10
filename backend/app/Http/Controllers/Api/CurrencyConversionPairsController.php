@@ -218,6 +218,8 @@ class CurrencyConversionPairsController extends Controller
     {
         try {
 
+
+
             $currencyConversionPair = CurrencyConversionPair::find($id);
             if(!isset($currencyConversionPair)) {
                 return response()->json([

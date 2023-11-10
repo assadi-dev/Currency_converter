@@ -55,6 +55,7 @@ import FormCurrencyView from './FormCurrencyView.vue';
 
     const toogleDeleteConfirm = (currency) => {
         deleteCurrencyDialog.value = !deleteCurrencyDialog.value;
+        
     };
 
     const toogleSelectedConfirm = () => {
