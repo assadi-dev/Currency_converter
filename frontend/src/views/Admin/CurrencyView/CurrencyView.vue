@@ -85,7 +85,7 @@ const deleteSelectedCurrency = () => {
     <div  class="col-12 mx-auto">
 
 
-<div class="card" v-if="!isLoading" >
+<div class="card"  >
     <Toast />
 <Toolbar class="mb-4">
     <template #start>
@@ -94,7 +94,7 @@ const deleteSelectedCurrency = () => {
     </template>
 
 </Toolbar>
-<DataTable  dataKey="id" 
+<DataTable   dataKey="id" 
     ref="dt"
     :value="currenciesCollections"
     :paginator="true" :rows="5" 
@@ -102,7 +102,8 @@ const deleteSelectedCurrency = () => {
     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
     :rowsPerPageOptions="[5,10,25]"
     currentPageReportTemplate="Afficher {first} à {last} sur {totalRecords} Devises"
-    :totalRecords="8"
+
+    v-if="!isLoading"
     >
 
     <template #header>

@@ -1,7 +1,7 @@
 
 import { AxiosError, AxiosResponse } from "axios"
 import { PairCurrencyFormValue } from "../types/Form.types"
-import { PairCurrencyForm, PairCurrencyType } from "../types/pairCurrency.type"
+import { PairCurrencyType } from "../types/pairCurrency.type"
 import { adminInstance } from "./instance.tsx"
 
 

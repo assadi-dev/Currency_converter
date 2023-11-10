@@ -244,7 +244,7 @@ class CurrencyConversionPairsController extends Controller
                 "count" => $currencyConversionPair->count
             ];
 
-            return response()->json([ 'message' => 'Paire de conversion crée',"data" => $pairCurrency], 201);
+            return response()->json([ 'message' => 'Paire de conversion crée',"data" => $pairCurrency], 200);
 
 
         } catch (\Throwable $th) {

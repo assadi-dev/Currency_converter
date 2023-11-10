@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Toolbar from "primevue/toolbar"
 import Button from "primevue/button"
@@ -11,16 +11,17 @@ import DialogDeleteSelected from "../../../components/Dialog/DialogDeleteSelecte
 import Toast from 'primevue/toast';
 import Dialog from 'primevue/dialog';
 import FormPairCurrencyView from './FormPairCurrencyView.vue'
-import { ApiPairCurrencySuccess ,PairCurrencyType} from "../../../services/types/pairCurrency.type";
+import { ApiPairCurrencySuccess, PairCurrencyType } from "../../../services/types/pairCurrency.type";
 import * as PairCurencyApi from "../../../services/api/PairCurrency.api"
 import { PairCurrencyFormValue } from "../../../services/types/Form.types"
 import * as PairDialogMessage from "../../../services/dialogmessage/PairCurrency"
+import FormEditPairCurrencyView from './FormEditPairCurrencyView.vue';
 
 
 
 const { pairCurrencies, isLoading, error } = useFetchPairCurrencies()
 
-const pairCurrenciesCollections = computed<ApiPairCurrencySuccess | null>(() => {
+const pairCurrenciesCollections = computed(() => {
     const { data } = pairCurrencies?.value
     return data
 })
@@ -51,24 +52,30 @@ const deleteMessage = ref<string>("")
 
 
 //state des element selectionnées
-const statePaireCurrency = ref<Omit<PairCurrencyType,"count">>()
+const statePaireCurrency = ref<Omit<PairCurrencyType, "count">>()
 
 
 //Affichage des modal
 const deletePairCurrencyDialog = ref(false)
 const deleteSelectedPairCurrencyDialog = ref(false)
 const newPairurrencyDialog = ref(false)
+const editPairCurrencyDialog = ref(false)
 
 const openNew = () => {
     newPairurrencyDialog.value = !newPairurrencyDialog.value
 }
 
-const editProduct = (paiCurrency) => {
-    console.log(paiCurrency);
-}
+const toggleEditConfirm = (pairCurrency: Omit<PairCurrencyType, "count">) => {
 
-const toogleDeleteConfirm = (pairCurrency:Omit<PairCurrencyType,"count">) => {
-  
+    editPairCurrencyDialog.value = !editPairCurrencyDialog.value;
+    statePaireCurrency.value = pairCurrency
+
+    console.log(pairCurrency);
+
+};
+
+const toogleDeleteConfirm = (pairCurrency: Omit<PairCurrencyType, "count">) => {
+
     deletePairCurrencyDialog.value = !deletePairCurrencyDialog.value;
     statePaireCurrency.value = pairCurrency
     deleteMessage.value = `Etes vous sur de vouloir suprimé la pair ${pairCurrency.codeFromCurrency}-${pairCurrency.nameFromCurrency} vers ${pairCurrency.codeToCurrency}-${pairCurrency.nameToCurrency}  ?`
@@ -83,32 +90,34 @@ const deleteSelectedCurrency = () => {
     try {
         pairCurrencies.value.data = pairCurrencies.value.data.filter((val) => !selectedPairCurrency.value.includes(val));
         deleteSelectedPairCurrencyDialog.value = false
-        toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS , detail: PairDialogMessage.DELETE_SELECTED_PAIR_SUCCESS, life: 3000 });
+        toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.DELETE_SELECTED_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
-        toast.add({ severity: 'error', summary:PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_SELECTED_PAIR_FAILED, life: 5000 });
+        toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_SELECTED_PAIR_FAILED, life: 5000 });
     }
 };
 
 /** suppression d'une seul element **/
 const deletePairCurrency = async () => {
-try {
-    const id = statePaireCurrency.value?.id
-    await PairCurencyApi.remove(id)
-    console.log(pairCurrencies?.value?.data);
+    try {
+        const id = statePaireCurrency.value?.id
+        // await PairCurencyApi.remove(id)
 
-    const itemRemoved = [...pairCurrencies?.value?.data]?.filter(val => val?.id != id)
-    pairCurrencies.value.data = itemRemoved
+        const itemRemoved = [...pairCurrencies?.value?.data]?.filter(val => val?.id != id)
 
-    toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.DELETE_PAIR_SUCCESS, life: 3000 });
+        pairCurrencies.value.data = itemRemoved
 
-} catch (error) {
-    toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_PAIR_FAILED, life: 3000 });
-}
-finally {
-    deletePairCurrencyDialog.value = false
-}
-    
-    
+        statePaireCurrency.value = null
+
+        toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.DELETE_PAIR_SUCCESS, life: 3000 });
+
+    } catch (error) {
+        toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_PAIR_FAILED, life: 3000 });
+    }
+    finally {
+        deletePairCurrencyDialog.value = false
+    }
+
+
 }
 /**Envoie les donnée vers le serveur**/
 const postFormValues = async (values: PairCurrencyFormValue) => {
@@ -116,7 +125,7 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
         const res = await PairCurencyApi.add(values)
         const pair = res.data.data
         console.log(pair);
-        
+
         pairCurrencies?.value?.data.push(pair)
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.ADD_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
@@ -128,14 +137,43 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
 
 }
 
+/** Envoie dees donnée pour l'edition au serveur**/
+const updateFormValues = async (values: PairCurrencyType) => {
+    try {
+
+        if(!pairCurrencies) return
+        
+        const collectionUpdated = [...pairCurrencies.value.data]?.map(v => {
+            if (v.id == values.id) {
+                return { ...v, exchange_rate: values.exchange_rate }
+            }
+
+            return v
+        })
+
+        pairCurrencies.value.data = collectionUpdated
+
+        const id = values.id
+        const data = { exchange_rate: values.exchange_rate }
+
+        await PairCurencyApi.update(id, data)
+
+        toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.EDIT_PAIR_SUCCESS, life: 3000 });
+
+    } catch (error) {
+        toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.EDIT_PAIR_FAILED, life: 3000 });
+
+    } finally {
+        editPairCurrencyDialog.value = false
+    }
+}
+
 </script>
 
 <template>
     <div class="grid">
         <div class="col-12 mx-auto">
-
-
-            <div class="card" v-if="!isLoading">
+            <div class="card">
                 <Toast />
                 <Toolbar class="mb-4">
                     <template #start>
@@ -146,8 +184,8 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
                     </template>
 
                 </Toolbar>
-                <DataTable dataKey="id" ref="dt" :value="pairCurrenciesCollections" :paginator="true" :rows="5"
-                    v-model:selection="selectedPairCurrency"
+                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" :paginator="true"
+                    :rows="5" v-model:selection="selectedPairCurrency"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
                     currentPageReportTemplate="Afficher {first} à {last} sur {totalRecords} Devises" :totalRecords="8">
@@ -168,7 +206,8 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
                     <Column field="count" header="Nombre d'utilisation"></Column>
                     <Column style="min-width:5rem">
                         <template #body="rowData">
-                            <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="deleteSelectedCurrency(rowData.data)"  />
+                            <Button icon="pi pi-pencil" outlined rounded class="mr-2"
+                                @click="toggleEditConfirm(rowData.data)" />
                             <Button icon="pi pi-trash" outlined rounded severity="danger"
                                 @click="toogleDeleteConfirm(rowData.data)" />
                         </template>
@@ -176,14 +215,6 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
                 </DataTable>
 
 
-                <Dialog v-model:visible="deleteSelectedCurrencyDialog" :style="{ width: '450px' }" header="Confirm"
-                    :modal="true">
-                    <DialogDeleteSelected message="Etes vous sur de vouloir suprimé les devises selectionné ?" />
-                    <template #footer>
-                        <Button label="Non" icon="pi pi-times" class="p-button-text" />
-                        <Button label="Oui" icon="pi pi-check" class="p-button-text" />
-                    </template>
-                </Dialog>
 
                 <!-- modal de suppression de la devise selectionné selectionnés -->
                 <Dialog v-model:visible="deletePairCurrencyDialog" :style="{ width: '450px' }" header="Confirm"
@@ -196,9 +227,16 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
                 </Dialog>
 
                 <!-- Modal d'ajout  -->
-                <Dialog v-model:visible="newPairurrencyDialog" :style="{ width: '450px' }" header="Product Details"
-                    :modal="true" class="p-fluid">
+                <Dialog v-model:visible="newPairurrencyDialog" :style="{ width: '450px' }"
+                    header="Ajouter une nouvelle paire de conveersion" :modal="true" class="p-fluid">
                     <FormPairCurrencyView @form-values="postFormValues" :on-cancel="openNew" />
+                </Dialog>
+
+                <!-- Modal d'edition  -->
+                <Dialog v-model:visible="editPairCurrencyDialog" :style="{ width: '450px' }"
+                    header="Modifier le taux de conversion" :modal="true" class="p-fluid">
+                    <FormEditPairCurrencyView :values="statePaireCurrency" @form-values="updateFormValues"
+                        :on-cancel="toggleEditConfirm" />
                 </Dialog>
 
 
