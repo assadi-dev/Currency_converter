@@ -113,11 +113,11 @@ class CurrencyConversionPairsController extends Controller
                     ]
             );
 
-            $codeFromCurrency = strtoupper($request->codeFromCurrency);
-            $nameFromCurrency = ucwords($request->nameFromCurrency);
-            $codeToCurrency = strtoupper($request->codeToCurrency);
-            $nameToCurrency = ucwords($request->nameToCurrency);
-            $exchange_rate = $request->exchange_rate;
+            $codeFromCurrency = trim(strtoupper($request->codeFromCurrency));
+            $nameFromCurrency = trim(ucwords($request->nameFromCurrency));
+            $codeToCurrency = trim(strtoupper($request->codeToCurrency));
+            $nameToCurrency = trim(ucwords($request->nameToCurrency));
+            $exchange_rate = trim($request->exchange_rate);
 
             //initialisation de la paire
             $newPaireCurrency = new CurrencyConversionPair();
@@ -230,7 +230,7 @@ class CurrencyConversionPairsController extends Controller
             }
 
 
-            $currencyConversionPair->exchange_rate = $request->exchange_rate;
+            $currencyConversionPair->exchange_rate = trim($request->exchange_rate);
             $currencyConversionPair->update();
 
 

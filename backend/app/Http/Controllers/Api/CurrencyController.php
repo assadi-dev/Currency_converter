@@ -51,11 +51,12 @@ class CurrencyController extends Controller
                     'message' => $validateUser->errors()
                 ], 400);
             }
-
+            $codeCurrency = trim(strtoupper($request->code));
+            $nameCurrency = trim(ucwords($request->name));
 
             $currency = Currency::create([
-                'code' => $request->code,
-                'name' => $request->name,
+                'code' => $codeCurrency,
+                'name' => $nameCurrency,
             ]);
 
 
@@ -136,9 +137,12 @@ class CurrencyController extends Controller
                 ], 404);
             }
 
+            $codeCurrency = trim(strtoupper($request->code));
+            $nameCurrency = trim(ucwords($request->name));
 
-            $currency->code =  $request->code;
-            $currency->name =  $request->name;
+
+            $currency->code =  $codeCurrency;
+            $currency->name =   $nameCurrency;
             $currency->update();
 
 
