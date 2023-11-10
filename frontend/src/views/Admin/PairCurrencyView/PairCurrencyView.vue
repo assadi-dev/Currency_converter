@@ -70,7 +70,7 @@ const toggleEditConfirm = (pairCurrency: Omit<PairCurrencyType, "count">) => {
     editPairCurrencyDialog.value = !editPairCurrencyDialog.value;
     statePaireCurrency.value = pairCurrency
 
-    console.log(pairCurrency);
+
 
 };
 
@@ -124,7 +124,7 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
     try {
         const res = await PairCurencyApi.add(values)
         const pair = res.data.data
-        console.log(pair);
+
 
         pairCurrencies?.value?.data.push(pair)
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.ADD_PAIR_SUCCESS, life: 3000 });
