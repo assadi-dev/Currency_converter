@@ -7,7 +7,8 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import { useToast } from "primevue/usetoast";
 import Toast from 'primevue/toast';
-import { useForm,useField  } from "vee-validate";
+import { useForm, useField } from "vee-validate";
+import {ErrorWithMessage} from "../services/types/Other"
 
 
 const { handleSubmit, setValues} = useForm();
@@ -15,6 +16,7 @@ const { handleSubmit, setValues} = useForm();
 const fromCurrency = useField("fromCurrency")
 const toCurrency = useField("toCurrency")
 const isSwitch = ref(false)
+const toast = useToast()
 
 
 const onSubmitConvert = handleSubmit(values => {
@@ -44,24 +46,22 @@ const updateToCurrencyInput = (event) => {
 } */
 
 const switchCurrency = () => {
-
-  
-
     const from = fromCurrency.value.value
     const to = toCurrency.value.value
 
-
-    
     try {
-        if (!from && to)
-        throw new Error("Veuillez selectionnez les devises");
+        if (!from && !to) {
+            throw new Error("Veuillez selectionnez les devises");
+        }
         fromCurrency.setValue(to) 
         toCurrency.setValue(from)
 
    
- } catch (error) {
-    
- }
+ } catch (error:ErrorWithMessage|any) {
+        console.log(error.message);
+
+    }
+ 
 }
 
 
