@@ -150,7 +150,7 @@ class CurrencyController extends Controller
                 'message' => 'la devise à été mise à jour',
                 'code' => $currency->code,
                 'name' => $currency->name
-            ], 201);
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'server error',
