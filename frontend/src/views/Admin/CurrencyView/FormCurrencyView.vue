@@ -44,7 +44,7 @@ const save = handleSubmit(values => {
     <form @submit="save">
         <div class="field">
             <label for="code">Code</label>
-            <InputText v-bind="code" name="code" :class="errors.code && 'p-invalid'"  id="code" autofocus placeholder="EX: EUR, GBR,"   />
+            <InputText v-bind="code" name="code" :class="errors.code && 'p-invalid'"  id="code" autofocus placeholder="EX: EUR, GBP,"   />
             <small class="p-error" id="codeFromCurrency">{{ errors.code || '&nbsp;' }}</small>
 
         </div>

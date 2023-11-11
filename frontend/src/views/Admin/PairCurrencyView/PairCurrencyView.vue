@@ -100,7 +100,7 @@ const deleteSelectedCurrency = () => {
 const deletePairCurrency = async () => {
     try {
         const id = statePaireCurrency.value?.id
-        // await PairCurencyApi.remove(id)
+         await PairCurencyApi.remove(id)
 
         const itemRemoved = [...pairCurrencies?.value?.data]?.filter(val => val?.id != id)
 
@@ -123,10 +123,17 @@ const deletePairCurrency = async () => {
 const postFormValues = async (values: PairCurrencyFormValue) => {
     try {
         const res = await PairCurencyApi.add(values)
-        const pair = res.data.data
+        const pairs = res.data.data
 
 
-        pairCurrencies?.value?.data.push(pair)
+
+        for (const pair of pairs) {
+         
+            
+            pairCurrencies?.value?.data.push(pair)
+        }
+
+      
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.ADD_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
 

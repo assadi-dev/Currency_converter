@@ -32,7 +32,7 @@ export type APISuccess = {
    
    type ResponseData = {
        message:string
-      data: PairCurrencyType
+      data: [PairCurrencyType]
     }
    
 
