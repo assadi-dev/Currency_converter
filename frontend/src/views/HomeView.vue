@@ -17,11 +17,31 @@ const fromCurrency = useField("fromCurrency")
 const toCurrency = useField("toCurrency")
 const isSwitch = ref(false)
 const toast = useToast()
+const isProcess = ref(false)
+
+
 
 
 const onSubmitConvert = handleSubmit(values => {
-    console.log(values);
+   
+try {
+    const fromCurency = values.fromCurrency?.code
+    const toCurency = values.toCurrency?.code
+    isProcess.value = true
+    if (!fromCurency || !toCurency) {
+        throw new Error("Veuillez definir les devises ");
+    }
 
+    //Procedure de la conversion
+    console.log(fromCurency,toCurency);
+    
+
+
+} catch (error:ErrorWithMessage| any) {
+    toast.add({ severity: 'error', summary: 'Erreur', detail: error.message,group:"bc" ,life: 3000 });
+} finally {
+    isProcess.value = false
+}
 })
 
 
@@ -35,15 +55,6 @@ const currencyOption = ref([
 ]);
 
 
-/* const updateFromCurrencyInput = (event) => {
-    const code = event.value.code
-    setValues({"fromCurrency":code}) 
-}
-
-const updateToCurrencyInput = (event) => {
-    const code = event.value.code
-    setValues({"toCurrency":code}) 
-} */
 
 const switchCurrency = () => {
     const from = fromCurrency.value.value
@@ -58,7 +69,8 @@ const switchCurrency = () => {
 
    
  } catch (error:ErrorWithMessage|any) {
-        console.log(error.message);
+
+        toast.add({ severity: 'error', summary: 'Erreur', detail: error.message,group:"bc" ,life: 3000 });
 
     }
  
@@ -70,7 +82,9 @@ const switchCurrency = () => {
 
 </script>
 <template>
+  
     <div class="surface-ground flex align-items-center justify-content-center page-container ">
+       
         <div class="flex flex-column align-items-center justify-content-center">
             <!--<img :src="logoUrl" alt="logo" class="mb-5 w-6rem flex-shrink-0" />-->
             <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)" >
@@ -101,7 +115,7 @@ const switchCurrency = () => {
                         </div>
 
                         <div class="flex align-items-center justify-content-between mt-5 gap-5"> 
-                            <Button :loading="false" type="submit" label="Convertir" class="mx-auto py-3 px-5 text-xl" aria-label="Convertir" />
+                            <Button :loading="isProcess" type="submit" label="Convertir" class="mx-auto py-3 px-5 text-xl" aria-label="Convertir" />
                         </div>
 
                     </form>
@@ -109,6 +123,7 @@ const switchCurrency = () => {
 
             </div>
         </div>
+        <Toast  position="bottom-center" group="bc" />
     </div>
 </template>
 
