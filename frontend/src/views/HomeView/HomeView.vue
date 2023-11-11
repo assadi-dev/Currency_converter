@@ -272,6 +272,10 @@ const switchCurrency = () => {
 
     }
 
+    .result-section{
+       align-items: flex-start;
+    }
+
     .row-footer {
         width: 100%;
         display: flex;
