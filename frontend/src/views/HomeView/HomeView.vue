@@ -91,7 +91,7 @@ const onSubmitConvert = handleSubmit(async values => {
     } catch (err: ErrorWithMessage | any) {
         console.log(err);
         
-        toast.add({ severity: 'error', summary: 'Erreur', detail: err.message, group: "bc", life: 3000 });
+        toast.add({ severity: 'error', summary: 'Erreur', detail: err.message, group: "bc", life: 5000 });
     } finally {
         isProcess.value = false
     }
