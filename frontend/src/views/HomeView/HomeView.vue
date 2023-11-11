@@ -100,7 +100,7 @@ const onSubmitConvert = handleSubmit(async values => {
 
 
 const calculateReverseRateCurrency = (pairCurrency:number) => {
-    return Math.round((1/Number(pairCurrency)))
+    return  (1/Number(pairCurrency)).toFixed(5)
 }
 
 

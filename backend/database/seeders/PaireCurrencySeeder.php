@@ -29,7 +29,7 @@ class PaireCurrencySeeder extends Seeder
             "nameFromCurrency" => "Livre sterling Britannique",
             "codeToCurrency" => "EUR",
             "nameToCurrency" => "Euro",
-            "exchange_rate" => 1.01423401
+            "exchange_rate" => 1.1423401
         ],
         [
             "codeFromCurrency" => "GBP",
@@ -48,9 +48,9 @@ class PaireCurrencySeeder extends Seeder
         [
             "codeFromCurrency" => "CHF",
             "nameFromCurrency" => "Franc suisse",
-            "codeToCurrency" => "Euro",
+            "codeToCurrency" => "Eur",
             "nameToCurrency" => "Euro",
-            "exchange_rate" => 1.1078207
+            "exchange_rate" => 1.0352941
         ],
     ];
 
