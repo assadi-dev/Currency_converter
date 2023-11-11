@@ -96,6 +96,7 @@ class PaireCurrencySeeder extends Seeder
                 'from_currency_id' => $from_currency_id,
                 'to_currency_id' => $to_currency_id,
                 'exchange_rate' => $exchange_rate,
+                'count' => 0
             ]);
             //Creation des paires inverses
             $exchange_rate_inversed = 1 / floatval($exchange_rate);
@@ -103,6 +104,7 @@ class PaireCurrencySeeder extends Seeder
                 'from_currency_id' => $to_currency_id,
                 'to_currency_id' => $from_currency_id ,
                 'exchange_rate' =>  $exchange_rate_inversed,
+                'count' => 0
             ]);
 
 

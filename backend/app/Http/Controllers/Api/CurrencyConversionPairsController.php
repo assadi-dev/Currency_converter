@@ -149,15 +149,31 @@ class CurrencyConversionPairsController extends Controller
 
             }
 
-
-            $newPaireCurrency = new CurrencyConversionPair();
+/* 
+            //  $newPaireCurrency = new CurrencyConversionPair();
 
 
             $newPaireCurrency->from_currency_id = $from_currency_id;
             $newPaireCurrency->to_currency_id = $to_currency_id;
             $newPaireCurrency->exchange_rate = $exchange_rate ;
             $newPaireCurrency->count = 0;
-            $newPaireCurrency->save();
+            $newPaireCurrency->save(); */
+
+            $newPaireCurrency = CurrencyConversionPair::create([
+                'from_currency_id' => $to_currency_id,
+                'to_currency_id' => $from_currency_id ,
+                'exchange_rate' =>  $exchange_rate,
+                'count' => 0
+            ]);
+
+            //Creation des paires inverses
+            $exchange_rate_inversed = 1 / floatval($exchange_rate);
+            $newPaireCurrencyInversed = CurrencyConversionPair::create([
+                'from_currency_id' => $newPaireCurrency->toCurrency->id ,
+                'to_currency_id' => $newPaireCurrency->fromCurrency->id,
+                'exchange_rate' =>  $exchange_rate_inversed,
+                'count' => 0
+            ]);
 
 
 
@@ -171,7 +187,17 @@ class CurrencyConversionPairsController extends Controller
                 "count" => $newPaireCurrency->count
             ];
 
-            return response()->json([ 'message' => 'Paire de conversion crée',"data" => $pairCurrency], 201);
+            $pairCurrencyInversed = [
+                "id" => $newPaireCurrencyInversed->id,
+               "codeFromCurrency" => $newPaireCurrencyInversed->fromCurrency->code,
+                "nameFromCurrency" =>  $newPaireCurrencyInversed->fromCurrency->name,
+                "codeToCurrency" =>  $newPaireCurrencyInversed->toCurrency->code,
+                "nameToCurrency" =>  $newPaireCurrencyInversed->toCurrency->name,
+                "exchange_rate" =>  $newPaireCurrencyInversed->exchange_rate,
+                "count" => $newPaireCurrencyInversed->count
+            ];
+
+            return response()->json([ 'message' => 'Paire de conversion crée',"data" => [$pairCurrency,$pairCurrencyInversed]], 201);
 
         } catch (\Throwable $th) {
             //throw $th;
