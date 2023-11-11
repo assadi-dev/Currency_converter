@@ -1,7 +1,7 @@
 
 
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeViewVue from '../views/HomeView.vue'
+import HomeViewVue from '../views/HomeView/HomeView.vue'
 import HomeAdminViewVue from '../views/Admin/HomeAdminView.vue'
 import LoginVue from '../views/Authentication/Login.vue'
 import AdminLayoutVue from '../views/Admin/AdminLayout.vue'

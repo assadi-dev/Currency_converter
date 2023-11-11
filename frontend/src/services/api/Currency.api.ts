@@ -1,10 +1,19 @@
-import {CurrencyType, CurrencyWithoutId } from "../types/currency.type"
+import {ApiConvertSuccess, CurrencyType, CurrencyWithoutId } from "../types/currency.type"
 import { adminInstance } from "./instance"
 
 
 export const fetchAll = () => {
    return adminInstance.get("/currencies")
 }
+
+export const fetchByPaginate = (page:number) => {
+   return adminInstance.get("/currencies",{params:{page}})
+}
+
+export const fetchListOfCurrencies = () => {
+   return adminInstance.get(`/currencies/lists`)
+}
+
 export const fetchOne = (id:any) => {
    return adminInstance.get(`/currency/${id}`)
 }
@@ -19,6 +28,12 @@ export const update = (id:any,data:Omit<CurrencyWithoutId, "created_at" | "updat
 export const remove = (id:any) => {
    return adminInstance.delete(`/currency/${id}`)
 }
+
+
+export const convertCurrency = (from:string,to:string,amount:number):Promise<ApiConvertSuccess> => {
+   return adminInstance.get(`/currency_converter/${from}/${to}/${amount}`)
+}
+
 
 export type APISuccess = {
     message: string
