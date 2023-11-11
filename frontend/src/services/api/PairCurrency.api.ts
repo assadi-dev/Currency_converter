@@ -22,9 +22,26 @@ export const update = (id:string,data:PairCurrencyFormValue) => {
    return adminInstance.put(`/currency_convert_pair/${id}`,data)
 }
 
-export const remove = async (id: string) => {
+export const remove = (id: string) => {
    return adminInstance.delete(`/currency_convert_pair/${id}`)
 }
+
+export const removeMultiple = async (collections: PairCurrencyType[]) =>
+   {
+   const promiseList = []
+
+   for (const item of collections) {
+      const id = item.id
+      const endpoint = adminInstance.delete(`/currency_convert_pair/${id}`)
+      promiseList.push(endpoint)
+   }
+
+
+   return Promise.all(promiseList)
+
+
+         
+   }
 
 export type APISuccess = {
  

@@ -53,6 +53,8 @@ const deleteMessage = ref<string>("")
 
 //state des element selectionnées
 const statePaireCurrency = ref<Omit<PairCurrencyType, "count">>()
+//Activation du loading lors d'une action
+const startProcess = ref(false)
 
 
 //Affichage des modal
@@ -81,24 +83,35 @@ const toogleDeleteConfirm = (pairCurrency: Omit<PairCurrencyType, "count">) => {
     deleteMessage.value = `Etes vous sur de vouloir suprimé la pair ${pairCurrency.codeFromCurrency}-${pairCurrency.nameFromCurrency} vers ${pairCurrency.codeToCurrency}-${pairCurrency.nameToCurrency}  ?`
 };
 
-const toogleSelectedConfirm = () => {
+const toggleSelectedConfirm = () => {
+    const sizeSelected = selectedPairCurrency.value.length
+    deleteMessage.value = `Etes vous sur de vouloir supprimr ces ${sizeSelected} éléments ?`
     deleteSelectedPairCurrencyDialog.value = !deleteSelectedPairCurrencyDialog.value;
 };
 
 /** suppression multiple */
-const deleteSelectedCurrency = () => {
+const deleteSelectedCurrency = async() => {
     try {
+startProcess.value = true
+       await  PairCurencyApi.removeMultiple(selectedPairCurrency.value);
+
+        
+    
         pairCurrencies.value.data = pairCurrencies.value.data.filter((val) => !selectedPairCurrency.value.includes(val));
-        deleteSelectedPairCurrencyDialog.value = false
+    
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.DELETE_SELECTED_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_SELECTED_PAIR_FAILED, life: 5000 });
+    } finally {
+        startProcess.value = false
+        deleteSelectedPairCurrencyDialog.value = false
     }
 };
 
 /** suppression d'une seul element **/
 const deletePairCurrency = async () => {
     try {
+        startProcess.value = true
         const id = statePaireCurrency.value?.id
          await PairCurencyApi.remove(id)
 
@@ -115,6 +128,8 @@ const deletePairCurrency = async () => {
     }
     finally {
         deletePairCurrencyDialog.value = false
+        startProcess.value = false
+
     }
 
 
@@ -144,7 +159,7 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
 
 }
 
-/** Envoie dees donnée pour l'edition au serveur**/
+/** Envoie des donnée pour l'edition au serveur**/
 const updateFormValues = async (values: PairCurrencyType) => {
     try {
 
@@ -186,7 +201,7 @@ const updateFormValues = async (values: PairCurrencyType) => {
                     <template #start>
                         <Button label="Ajouter une devise" icon="pi pi-plus" class="p-button-success mr-2"
                             @click="openNew" />
-                        <Button label="Supprimer" icon="pi pi-trash" class="p-button-danger" @click="toogleSelectedConfirm"
+                        <Button label="Supprimer" icon="pi pi-trash" class="p-button-danger" @click="toggleSelectedConfirm"
                             :disabled="!selectedPairCurrency || !selectedPairCurrency.length" />
                     </template>
 
@@ -223,19 +238,28 @@ const updateFormValues = async (values: PairCurrencyType) => {
 
 
 
-                <!-- modal de suppression de la devise selectionné selectionnés -->
-                <Dialog v-model:visible="deletePairCurrencyDialog" :style="{ width: '450px' }" header="Confirm"
+                <!-- modal de suppression de la devise -->
+                <Dialog v-model:visible="deletePairCurrencyDialog" :style="{ width: '450px' }" header="Suppression"
                     :modal="true">
                     <DialogDeleteSelected :message="deleteMessage" />
                     <template #footer>
                         <Button label="Non" icon="pi pi-times" class="p-button-text" @click="toogleDeleteConfirm" />
-                        <Button label="Oui" icon="pi pi-check" class="p-button-text" @click="deletePairCurrency" />
+                        <Button label="Oui" icon="pi pi-check" class="p-button-text" @click="deletePairCurrency" :loading="startProcess" />
+                    </template>
+                </Dialog>
+                <!-- modal de suppression des elements selectionnée -->
+                <Dialog v-model:visible="deleteSelectedPairCurrencyDialog" :style="{ width: '450px' }" :header="`${selectedPairCurrency.length} élement(s) selectionnée`"
+                    :modal="true">
+                    <DialogDeleteSelected :message="deleteMessage" />
+                    <template #footer>
+                        <Button label="Non" icon="pi pi-times" class="p-button-text" @click="toggleSelectedConfirm" />
+                        <Button label="Oui" icon="pi pi-check" class="p-button-text" @click="deleteSelectedCurrency" :loading="startProcess" />
                     </template>
                 </Dialog>
 
                 <!-- Modal d'ajout  -->
                 <Dialog v-model:visible="newPairurrencyDialog" :style="{ width: '450px' }"
-                    header="Ajouter une nouvelle paire de conveersion" :modal="true" class="p-fluid">
+                    header="Ajouter une nouvelle paire de devise" :modal="true" class="p-fluid">
                     <FormPairCurrencyView @form-values="postFormValues" :on-cancel="openNew" />
                 </Dialog>
 

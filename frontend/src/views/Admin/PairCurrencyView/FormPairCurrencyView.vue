@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import InputText from 'primevue/inputtext';
 import Button from "primevue/button"
-import {  useForm } from 'vee-validate';
+import { useForm } from 'vee-validate';
+import { ref} from 'vue';
 import { PairCurrencyForm } from "./SchemaValidation"
 
 
@@ -17,7 +18,7 @@ const {errors, defineInputBinds, handleSubmit } = useForm({
 });
 
 
-
+const isLoading = ref(false)
 
 const emit = defineEmits(["formValues"])
 
@@ -33,6 +34,7 @@ const props = defineProps<FormPropsType>()
 
 
 const save = handleSubmit(values => {
+    isLoading.value = true
     emit("formValues",values)
 })
 
@@ -71,7 +73,7 @@ const save = handleSubmit(values => {
 
         <div class="p-dialog-footer py-3" >
             <Button  type="button" label="Annuler" icon="pi pi-times" class="p-button-text" @click="props.onCancel" />
-            <Button type="submit" label="Ajouter" icon="pi pi-check" class="p-button-text" />
+            <Button type="submit" label="Ajouter" icon="pi pi-check" class="p-button-text" :loading="isLoading" />
         </div>
 </form>
 
