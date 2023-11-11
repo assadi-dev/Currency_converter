@@ -1,0 +1,10 @@
+export const TITLE_SUCCESS = 'Opération réussie'
+export const TITLE_FAILED = `Echec de l'operation`
+export const ADD_CURRENCY_SUCCESS = 'Devise ajouté'
+export const ADD_CURRENCY_FAILED = `La devise n'a pas pu etre ajouté`
+export const DELETE_CURRENCY_SUCCESS = 'Devise supprimé'
+export const DELETE_CURRENCY_FAILED = `La paire n'a pas pu etre supprimé`
+export const EDIT_CURRENCY_SUCCESS = 'Devise modifié'
+export const EDIT_CURRENCY_FAILED = `La devise n'a pas pu etre modifié`
+export const DELETE_SELECTED_CURRENCY_SUCCESS = 'Les elements séléctionnés on été supprimé'
+export const DELETE_SELECTED_CURRENCY_FAILED = `Les elements séléctionnés n'ont pas pu etre supprimé`

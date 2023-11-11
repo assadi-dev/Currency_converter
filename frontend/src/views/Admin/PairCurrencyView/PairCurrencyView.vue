@@ -52,7 +52,7 @@ const deleteMessage = ref<string>("")
 
 
 //state des element selectionnées
-const statePaireCurrency = ref<Omit<PairCurrencyType, "count">>()
+const statePaireCurrency = ref<Omit<PairCurrencyType, "count">| null >()
 //Activation du loading lors d'une action
 const startProcess = ref(false)
 
@@ -129,6 +129,7 @@ const deletePairCurrency = async () => {
     finally {
         deletePairCurrencyDialog.value = false
         startProcess.value = false
+        statePaireCurrency.value = null
 
     }
 
@@ -137,6 +138,7 @@ const deletePairCurrency = async () => {
 /**Envoie les donnée vers le serveur**/
 const postFormValues = async (values: PairCurrencyFormValue) => {
     try {
+        startProcess.value = true
         const res = await PairCurencyApi.add(values)
         const pairs = res.data.data
 
@@ -155,6 +157,7 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
         toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.ADD_PAIR_FAILED, life: 3000 });
     } finally {
         newPairurrencyDialog.value = false
+        startProcess.value = false
     }
 
 }
@@ -163,7 +166,8 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
 const updateFormValues = async (values: PairCurrencyType) => {
     try {
 
-        if(!pairCurrencies) return
+       
+        startProcess.value = true
         
         const collectionUpdated = [...pairCurrencies.value.data]?.map(v => {
             if (v.id == values.id) {
@@ -186,7 +190,9 @@ const updateFormValues = async (values: PairCurrencyType) => {
         toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.EDIT_PAIR_FAILED, life: 3000 });
 
     } finally {
+        startProcess.value = false
         editPairCurrencyDialog.value = false
+        statePaireCurrency = null
     }
 }
 
@@ -260,14 +266,14 @@ const updateFormValues = async (values: PairCurrencyType) => {
                 <!-- Modal d'ajout  -->
                 <Dialog v-model:visible="newPairurrencyDialog" :style="{ width: '450px' }"
                     header="Ajouter une nouvelle paire de devise" :modal="true" class="p-fluid">
-                    <FormPairCurrencyView @form-values="postFormValues" :on-cancel="openNew" />
+                    <FormPairCurrencyView @form-values="postFormValues" :on-cancel="openNew" :is-loading="startProcess" />
                 </Dialog>
 
                 <!-- Modal d'edition  -->
                 <Dialog v-model:visible="editPairCurrencyDialog" :style="{ width: '450px' }"
                     header="Modifier le taux de conversion" :modal="true" class="p-fluid">
                     <FormEditPairCurrencyView :values="statePaireCurrency" @form-values="updateFormValues"
-                        :on-cancel="toggleEditConfirm" />
+                        :on-cancel="toggleEditConfirm"  :is-loading="startProcess"  />
                 </Dialog>
 
 

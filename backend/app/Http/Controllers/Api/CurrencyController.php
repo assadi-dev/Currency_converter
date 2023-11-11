@@ -62,6 +62,7 @@ class CurrencyController extends Controller
 
             return response()->json([
                 'message' => 'Devise crée',
+                "id" => $currency->id,
                 'code' => $currency->code,
                 'name' => $currency->name
             ], 201);
@@ -148,6 +149,7 @@ class CurrencyController extends Controller
 
             return response()->json([
                 'message' => 'la devise à été mise à jour',
+
                 'code' => $currency->code,
                 'name' => $currency->name
             ], 200);

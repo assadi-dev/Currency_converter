@@ -16,9 +16,10 @@ type FormPropsType = {
     values?:Omit<PairCurrencyType,"id" | "count">
     onSubmit?: Function
     onCancel?: Function
+    isLoading?: boolean
 }
 
-const isLoading = ref(false)
+
 
 const { errors, defineInputBinds, handleSubmit } = useForm({
     initialValues:props.values,
@@ -37,7 +38,7 @@ const emit = defineEmits(["formValues"])
 
 
 const save = handleSubmit(values => {
-    isLoading.value = true
+  
     emit("formValues",values)
 })
 
@@ -79,7 +80,7 @@ const save = handleSubmit(values => {
      
         <div class="p-dialog-footer py-3" >
             <Button  type="button" label="Annuler" icon="pi pi-times" class="p-button-text" @click="props.onCancel" />
-            <Button type="submit" label="Modifier" icon="pi pi-check" class="p-button-text" :loading="isLoading" />
+            <Button type="submit" label="Modifier" icon="pi pi-check" class="p-button-text" :loading="props.isLoading" />
         </div>
 </form>
 

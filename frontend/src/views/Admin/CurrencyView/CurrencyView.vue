@@ -13,6 +13,10 @@ import Dialog from 'primevue/dialog';
 import FormCurrencyView from './FormCurrencyView.vue';
 import { defaultFormCurrency } from './SchemaValidation';
 import * as CurencyApi from "../../../services/api/Currency.api"
+import * as CurrencyDialogMessage from "../../../services/dialogmessage/Currency"
+import { string } from 'yup';
+import DialogDeleteSelected from '../../../components/Dialog/DialogDeleteSelected.vue';
+
 
 
 
@@ -24,6 +28,7 @@ const toast = useToast()
 
 const stateSelectedCurrency = ref<Omit<CurrencyType, "created_at" | "updated_at"> | null>()
 const startloading = ref(false)
+const deleteMessage = ref<string>("")
 
 
 //Fetching des devises vers le serveur
@@ -58,31 +63,46 @@ const toggleEditCurrency = (currency: Omit<CurrencyType, "created_at" | "updated
     editToggleEditDialog.value = !editToggleEditDialog.value
 }
 
-const toggleDeleteConfirm = (currency) => {
+const toggleDeleteConfirm = (currency:Omit<CurrencyType, "created_at" | "updated_at">) => {
+    deleteMessage.value = `Etes vous sur de vouloir supprimer la devise ${currency.code}-${currency.name} ?`
+    stateSelectedCurrency.value = currency
     deleteCurrencyDialog.value = !deleteCurrencyDialog.value;
 
 };
 
 
 const submitData = async (data: defaultFormCurrency) => {
-  try {
-    console.log(data);
+    try {
+        startloading.value = true
+
+        const res = await CurencyApi.add(data)
+        const payload = {id:res.data.id,code:res.data.code,name:res.data.name}
+
+        currencies.value.data.push(payload)
+
+        toast.add({ severity: 'success', summary: CurrencyDialogMessage.TITLE_SUCCESS, detail: CurrencyDialogMessage.ADD_CURRENCY_SUCCESS, life: 3000 });
+
   } catch (error) {
-    
-  } finally {
+    toast.add({ severity: 'error', summary: CurrencyDialogMessage.TITLE_FAILED, detail: CurrencyDialogMessage.ADD_CURRENCY_FAILED, life: 3000 });
+    } finally {
+        startloading.value = false
     newCurrencyDialog.value = false
   }
 
 }
 
+
+
+
 const submitUpdateData = async (data: CurrencyType) => {
 
     try {
 
+        startloading.value = true
   
         const id = data.id 
     
-        if(!id)return 
+     
 
     await CurencyApi.update(id,data)
 
@@ -94,16 +114,41 @@ const submitUpdateData = async (data: CurrencyType) => {
     })
 
     currencies.value.data = updatedCollections
+    
+    toast.add({ severity: 'success', summary: CurrencyDialogMessage.TITLE_SUCCESS, detail: CurrencyDialogMessage.EDIT_CURRENCY_SUCCESS, life: 3000 });
 
 
 } catch (error) {
-    
+    toast.add({ severity: 'error', summary: CurrencyDialogMessage.TITLE_FAILED, detail: CurrencyDialogMessage.EDIT_CURRENCY_FAILED, life: 3000 });
+
 } finally {
-   
+    startloading.value = false
     stateSelectedCurrency.value = null
     editToggleEditDialog.value = false
 }
 
+}
+
+const deleteCurrency = async() => {
+    try {
+        startloading.value = true
+        const id = stateSelectedCurrency.value?.id
+
+        const removedCurrency = [...currencies.value.data].filter(v => v.id != id)
+
+        await CurencyApi.remove(id)
+
+        currencies.value.data = removedCurrency
+        toast.add({ severity: 'success', summary: CurrencyDialogMessage.TITLE_SUCCESS, detail: CurrencyDialogMessage.DELETE_CURRENCY_SUCCESS, life: 3000 });
+
+    } catch (error) {
+        toast.add({ severity: 'error', summary: CurrencyDialogMessage.TITLE_FAILED, detail: CurrencyDialogMessage.DELETE_CURRENCY_FAILED, life: 3000 });
+
+    } finally {
+        startloading.value = false
+        deleteCurrencyDialog.value = false
+        stateSelectedCurrency.value = null
+    }
 }
 
 
@@ -123,7 +168,7 @@ const submitUpdateData = async (data: CurrencyType) => {
                     </template>
 
                 </Toolbar>
-                <DataTable dataKey="id" ref="dt" :value="currenciesCollections" v-if="!isLoading">
+                <DataTable  :rows="5" dataKey="id" ref="dt" :value="currenciesCollections" v-if="!isLoading">
 
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -145,11 +190,12 @@ const submitUpdateData = async (data: CurrencyType) => {
                 </DataTable>
 
                 <!-- modal de suppression des elements selectionnés -->
-                <Dialog :style="{ width: '450px' }" header="Confirm" :modal="true">
+                <Dialog v-model:visible="deleteCurrencyDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                    <DialogDeleteSelected :message="deleteMessage" />
 
                     <template #footer>
-                        <Button label="Non" icon="pi pi-times" class="p-button-text" />
-                        <Button label="Oui" icon="pi pi-check" class="p-button-text" />
+                        <Button label="Non" icon="pi pi-times" class="p-button-text" @click="toggleDeleteConfirm" />
+                        <Button label="Oui" icon="pi pi-check" class="p-button-text" @click="deleteCurrency" :loading="startloading"  />
                     </template>
                 </Dialog>
 
@@ -158,7 +204,7 @@ const submitUpdateData = async (data: CurrencyType) => {
                     :modal="true" class="p-fluid">
 
                     <FormCurrencyView label-submit-button="Ajouter" :on-cancel="toggleNewCurrency"
-                        @submitForm="submitData" />
+                        @submitForm="submitData" :is-loading="startloading" />
 
                 </Dialog>
 
@@ -166,7 +212,7 @@ const submitUpdateData = async (data: CurrencyType) => {
                 <Dialog v-model:visible="editToggleEditDialog" :style="{ width: '450px' }" header="Modifier la devise"
                     :modal="true" class="p-fluid">
                     <FormCurrencyView label-submit-button="Modifier" :on-cancel="toggleEditCurrency"
-                        @submitForm="submitUpdateData" :defaultvalues="stateSelectedCurrency" />
+                        @submitForm="submitUpdateData" :defaultvalues="stateSelectedCurrency" :is-loading="startloading" />
                 </Dialog>
 
             </div>

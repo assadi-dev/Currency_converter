@@ -11,6 +11,7 @@ import { PairCurrencyForm } from "./SchemaValidation"
 type FormPropsType = {
     onSubmit?: Function
     onCancel?: Function
+    isLoading?: boolean
 }
 
 const {errors, defineInputBinds, handleSubmit } = useForm({
@@ -18,7 +19,6 @@ const {errors, defineInputBinds, handleSubmit } = useForm({
 });
 
 
-const isLoading = ref(false)
 
 const emit = defineEmits(["formValues"])
 
@@ -34,7 +34,7 @@ const props = defineProps<FormPropsType>()
 
 
 const save = handleSubmit(values => {
-    isLoading.value = true
+
     emit("formValues",values)
 })
 
@@ -73,7 +73,7 @@ const save = handleSubmit(values => {
 
         <div class="p-dialog-footer py-3" >
             <Button  type="button" label="Annuler" icon="pi pi-times" class="p-button-text" @click="props.onCancel" />
-            <Button type="submit" label="Ajouter" icon="pi pi-check" class="p-button-text" :loading="isLoading" />
+            <Button type="submit" label="Ajouter" icon="pi pi-check" class="p-button-text" :loading="props.isLoading" />
         </div>
 </form>
 

@@ -8,9 +8,10 @@ import {defaultFormCurrency} from "./SchemaValidation"
 
 
 type FormPropsType = {
-    labelSubmitButton?:string,
+    labelSubmitButton?:string
     onCancel?: Function
-    defaultvalues?:defaultFormCurrency
+    defaultvalues?: defaultFormCurrency
+    isLoading:boolean
 }
 
 
@@ -58,7 +59,7 @@ const save = handleSubmit(values => {
         </div>
         <div class="p-dialog-footer py-3">
             <Button type="button" label="Annuler" icon="pi pi-times" class="p-button-text" @click="props.onCancel" />
-            <Button type="submit" :label="props.labelSubmitButton" icon="pi pi-check" class="p-button-text" />
+            <Button type="submit" :label="props.labelSubmitButton" icon="pi pi-check" class="p-button-text" :loading="props.isLoading" />
         </div>
     </form>
 </template>
