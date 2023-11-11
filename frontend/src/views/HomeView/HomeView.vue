@@ -75,7 +75,7 @@ const onSubmitConvert = handleSubmit(async values => {
             const result = await CurrencyApi.convertCurrency(fromCurrency, toCurrency, amount)
             stateResultConversion.value.fromCurrencyCode = result.data.from
             stateResultConversion.value.toCurrencyCode = result.data.to
-            stateResultConversion.value.result = result.data.result
+            stateResultConversion.value.result = result.data.result.toFixed(2)
             stateResultConversion.value.fromCurrencyRate = `1 ${result.data.from} = ${result.data.pairCurrency} ${result.data.to}`
             stateResultConversion.value.toCurrencyRate = `1 ${result.data.to} = ${calculateReverseRateCurrency(result.data.pairCurrency)} ${result.data.from}`
             
