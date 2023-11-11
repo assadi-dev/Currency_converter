@@ -54,6 +54,8 @@ class CurrencyController extends Controller
             $codeCurrency = trim(strtoupper($request->code));
             $nameCurrency = trim(ucfirst($request->name));
 
+
+
             $currency = Currency::create([
                 'code' => $codeCurrency,
                 'name' => $nameCurrency,
@@ -64,7 +66,8 @@ class CurrencyController extends Controller
                 'message' => 'Devise crée',
                 "id" => $currency->id,
                 'code' => $currency->code,
-                'name' => $currency->name
+                'name' => $currency->name,
+                'count' => 0
             ], 201);
         } catch (\Throwable $th) {
             return response()->json([
@@ -112,9 +115,6 @@ class CurrencyController extends Controller
     public function update(Request $request, $id)
     {
 
-
-
-
         try {
             $validateUser = Validator::make(
                 $request->all(),
@@ -141,7 +141,6 @@ class CurrencyController extends Controller
             $codeCurrency = trim(strtoupper($request->code));
             $nameCurrency = trim(ucfirst($request->name));
 
-
             $currency->code =  $codeCurrency;
             $currency->name =   $nameCurrency;
             $currency->update();
@@ -149,7 +148,6 @@ class CurrencyController extends Controller
 
             return response()->json([
                 'message' => 'la devise à été mise à jour',
-
                 'code' => $currency->code,
                 'name' => $currency->name
             ], 200);
@@ -191,4 +189,20 @@ class CurrencyController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Retourne la liste des devises enregistre dans la base de donnée
+     */
+    public function listCurrency()
+    {
+        try {
+            return CurrencyRessource::collection(Currency::all(["id","code","name"]));
+        } catch (\Throwable $th) {
+
+            $message = $th->getMessage();
+            return response()->json(["message" => $message], 500);
+        }
+    }
+
+
 }

@@ -27,6 +27,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/currency', [CurrencyController::class, 'store']);
 Route::get('/currencies', [CurrencyController::class, 'index']);
+Route::get('/currencies/lists', [CurrencyController::class, 'listCurrency']);
 Route::get('/currency/{id}', [CurrencyController::class, 'show']);
 Route::put('/currency/{id}', [CurrencyController::class, 'update']);
 Route::delete('/currency/{id}', [CurrencyController::class, 'destroy']);

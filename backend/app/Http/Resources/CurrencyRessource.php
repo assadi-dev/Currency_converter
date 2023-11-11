@@ -14,10 +14,13 @@ class CurrencyRessource extends JsonResource
      */
     public function toArray($request)
     {
+        $totalCount = $this->fromCollections->count() + $this->toCollections->count();
+
         return [
             "id" => $this->id,
             "code" => $this->code,
             "name" => $this->name,
+            "count" => $totalCount
         ];
     }
 }

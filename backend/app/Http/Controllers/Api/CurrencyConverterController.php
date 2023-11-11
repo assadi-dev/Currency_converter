@@ -51,13 +51,16 @@ class CurrencyConverterController extends Controller
         }
     }
 
+
+
+
+
+
+    /**Récuperation du taux de conversion */
     public function extract_currency_rate($from_currency, $to_currency)
     {
-
         $exchange_rate = $this->currency_pair_converters->findByExchangeRate($from_currency, $to_currency)->exchange_rate;
-
         return $exchange_rate;
-
     }
 
 

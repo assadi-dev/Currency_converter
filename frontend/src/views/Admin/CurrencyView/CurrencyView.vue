@@ -63,7 +63,8 @@ const toggleEditCurrency = (currency: Omit<CurrencyType, "created_at" | "updated
     editToggleEditDialog.value = !editToggleEditDialog.value
 }
 
-const toggleDeleteConfirm = (currency:Omit<CurrencyType, "created_at" | "updated_at">) => {
+const toggleDeleteConfirm = (currency: Omit<CurrencyType, "created_at" | "updated_at">) => {
+    if(currency?.count == 0) return
     deleteMessage.value = `Etes vous sur de vouloir supprimer la devise ${currency.code}-${currency.name} ?`
     stateSelectedCurrency.value = currency
     deleteCurrencyDialog.value = !deleteCurrencyDialog.value;
@@ -168,7 +169,7 @@ const deleteCurrency = async() => {
                     </template>
 
                 </Toolbar>
-                <DataTable  :rows="5" dataKey="id" ref="dt" :value="currenciesCollections" v-if="!isLoading">
+                <DataTable  :rows="5" dataKey="id" ref="dt" :value="currenciesCollections" v-if="!isLoading"   >
 
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -183,7 +184,7 @@ const deleteCurrency = async() => {
                         <template #body="rowData">
                             <Button icon="pi pi-pencil" outlined rounded class="mr-2"
                                 @click="toggleEditCurrency(rowData.data)" />
-                            <Button icon="pi pi-trash" outlined rounded severity="danger"
+                            <Button v-if="rowData.data.count == 0 " icon="pi pi-trash" outlined rounded severity="danger"
                                 @click="toggleDeleteConfirm(rowData.data)" />
                         </template>
                     </Column>
