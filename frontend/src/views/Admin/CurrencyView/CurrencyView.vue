@@ -16,6 +16,7 @@ import * as CurencyApi from "../../../services/api/Currency.api"
 import * as CurrencyDialogMessage from "../../../services/dialogmessage/Currency"
 import DialogDeleteSelected from '../../../components/Dialog/DialogDeleteSelected.vue';
 import CustomPaginator from '../../../components/Navigations/CustomPaginator.vue';
+import LoadingTable from '../../../components/LoadingTable.vue';
 
 
 
@@ -206,7 +207,7 @@ const deleteCurrency = async() => {
                     </template>
 
                 </Toolbar>
-                <DataTable  :rows="5" dataKey="id" ref="dt" :value="currenciesCollections" v-if="!isLoading"   >
+                <DataTable  v-if="!isLoading"   :rows="5" dataKey="id" ref="dt" :value="currenciesCollections"  >
 
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
