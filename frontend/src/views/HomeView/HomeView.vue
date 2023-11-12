@@ -1,7 +1,7 @@
 <script setup lang="ts"  >
 import InputNumber from "primevue/inputnumber"
 import Dropdown from 'primevue/dropdown';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import Button from 'primevue/button';
 
 import { useToast } from "primevue/usetoast";
@@ -30,29 +30,95 @@ const amount = defineInputBinds("amount")
 const isSwitch = ref(false)
 const toast = useToast()
 const isProcess = ref(false)
+const isCanSelected = ref(true)
 
-const stateResultConversion = ref<ResultConversionType | null>({fromCurrencyCode:"",toCurrencyCode:"",fromCurrencyRate:"",toCurrencyRate:"",result:""})
+const stateResultConversion = ref<ResultConversionType>({fromCurrencyCode:"",toCurrencyCode:"",fromCurrencyRate:"",toCurrencyRate:"",result:""})
 
 
 const currencyOption = computed<CurrencyList[] | []>(() => {
     let list = currencyList?.value?.data
 
     if (list) {
-        return [...list]?.map(v => {
-            return { code: v.code, name: `${v.code}-${v.name}` }
-
-        })
-
+       return  [...list].map(v=>cleanCurrencyOption(v))
     }
 
     return []
 
 });
 
+const fromCurrencyOption = ref<CurrencyList[] | []>()
+
+const toCurrencyOption = ref<CurrencyList[] | []>()
+
+watch(currencyOption,() => {
+    fromCurrencyOption.value = currencyOption.value
+    toCurrencyOption.value = currencyOption.value
+})
+
+watch(fromCurrency.value, () => {
+
+
+const selected = fromCurrency.value.value
+ const toSelected = toCurrency.value.value
+  
+   if (selected) {
+       toCurrencyOption.value = selected.toCurrencyAvailable
+
+       let exist = toCurrencyOption.value && toCurrencyOption.value.find(c => c.code == toSelected?.code)
+
+       if (exist) {
+        toCurrency.setValue(exist)
+       }
+  
+       isCanSelected.value = false
+   } else {
+   isCanSelected.value = true
+  } 
+
+
+})
+
+const switchCurrency = () => {
+
+
+    
+    const from = currencyOption.value.find(v=> v.code == fromCurrency.value?.value?.code)
+    const to = currencyOption.value.find(v=> v.code == toCurrency.value?.value?.code)
+    
+
+    try {
+        if (!from && !to) {
+            throw new Error("Veuillez selectionnez les devises");
+        }
+
+        toCurrencyOption.value = currencyOption.value
+        fromCurrency.setValue(to)
+        toCurrency.setValue(from)
+
+   
+
+
+    } catch (error: ErrorWithMessage | any) {
+
+        toast.add({ severity: 'error', summary: 'Erreur', detail: error.message, group: "bc", life: 3000 });
+
+    }
+
+}
+
+ 
+const cleanCurrencyOption = (currency?: CurrencyList ): CurrencyList => {
+    if (currency) {
+
+        return { code: currency?.code, name: `${currency?.code}-${currency?.name}`,toCurrencyAvailable:currency?.toCurrencyAvailable}
+
+    }
+    return {}
+}
 
 
 
-
+//Soumission du formulaire
 const onSubmitConvert = handleSubmit(async values => {
 
     try {
@@ -82,16 +148,10 @@ const onSubmitConvert = handleSubmit(async values => {
         }
      
 
-
-
-
-
-
-
-    } catch (err: ErrorWithMessage | any) {
-        console.log(err);
+    } catch (err: unknown) {
+     
         
-        toast.add({ severity: 'error', summary: 'Erreur', detail: err.message, group: "bc", life: 5000 });
+        toast.add({ severity: 'error', summary: 'Erreur', detail: ( err as Error).message, group: "bc", life: 5000 });
     } finally {
         isProcess.value = false
     }
@@ -104,26 +164,6 @@ const calculateReverseRateCurrency = (pairCurrency:number) => {
 }
 
 
-
-const switchCurrency = () => {
-    const from = fromCurrency.value.value
-    const to = toCurrency.value.value
-
-    try {
-        if (!from && !to) {
-            throw new Error("Veuillez selectionnez les devises");
-        }
-        fromCurrency.setValue(to)
-        toCurrency.setValue(from)
-
-
-    } catch (error: ErrorWithMessage | any) {
-
-        toast.add({ severity: 'error', summary: 'Erreur', detail: error.message, group: "bc", life: 3000 });
-
-    }
-
-}
 
 
 
@@ -161,8 +201,8 @@ const switchCurrency = () => {
                         <div class="row-select-input">
                             <div class="input-container">
                                 <label for="fromCurrency" class="block text-900 text-xl font-medium mb-2">De </label>
-                                <Dropdown :loading="isLoading" v-if="!isSwitch" v-model="fromCurrency.value.value" filter
-                                    :options="currencyOption" optionLabel="name" placeholder="Selectionner une devise"
+                                <Dropdown :loading="isLoading"  v-model="fromCurrency.value.value" filter
+                                    :options="fromCurrencyOption" optionLabel="name" placeholder="Selectionner une devise"
                                     :class="['input-select w-full md:w-18rem']" />
                             </div>
                             <div class="switch-section ">
@@ -174,9 +214,9 @@ const switchCurrency = () => {
                             </div>
                             <div class="input-container">
                                 <label for="toCurrency" class="block text-900 text-xl font-medium mb-2">Vers</label>
-                                <Dropdown :loading="isLoading" v-if="!isSwitch" v-model="toCurrency.value.value" filter
-                                    :options="currencyOption" optionLabel="name" placeholder="Selectionner une devise"
-                                    :class="['input-select w-full md:w-18rem']" />
+                                <Dropdown :loading="isLoading"  v-model="toCurrency.value.value" filter
+                                    :options="toCurrencyOption" optionLabel="name" placeholder="Selectionner une devise"
+                                    :class="['input-select w-full md:w-18rem']"  :disabled="isCanSelected"  />
                             </div>
 
                         </div>

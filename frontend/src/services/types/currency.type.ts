@@ -13,7 +13,13 @@ export type ApiCurrencySuccess = {
   data: CurrencyType[];
 };
 
-export type CurrencyList = Omit<CurrencyType, "created_at" | "updated_at">;
+export type CurrencyList = {
+  id?: number;
+  code?: string;
+  name?: string;
+  count?: number;
+  toCurrencyAvailable?: Omit<CurrencyType,"created_at"|"updated_at">[]
+} ;
 
 export type ApiCurrencyListSuccess = {
   data: CurrencyList[];
