@@ -31,11 +31,13 @@ const toast = useToast()
 const lastPage = ref(1)
 
 
+
 const pairCurrenciesCollections = computed(() => {
     if (pairCurrencies.value) {
         const { data,meta } = pairCurrencies.value
         totalRecords.value = meta.total
         lastPage.value = meta.last_page
+     
             return data
     }
         return []
@@ -265,7 +267,7 @@ const updateFormValues = async (values: PairCurrencyType) => {
                     </Column>
                 </DataTable>
                 
-                <CustomPaginator />
+                <CustomPaginator :go-first-page="goFirstPage" :total-page="lastPage" :index-page="indexPage" :total-records="totalRecords"  :go-last-page="goLastPage" :go-next-page="goNextPage"  :go-prev-page="goPrevPage" :last-page="lastPage" />
 
              <!--    <Paginator :rows="5"  :pt="{
                     nextPageButton:next
