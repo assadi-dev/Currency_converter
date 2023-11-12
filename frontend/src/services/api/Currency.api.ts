@@ -2,8 +2,10 @@ import {ApiConvertSuccess, CurrencyType, CurrencyWithoutId } from "../types/curr
 import { adminInstance } from "./instance"
 
 
-export const fetchAll = () => {
-   return adminInstance.get("/currencies")
+export const fetchAll = (params:any) => {
+
+   
+   return adminInstance.get("/currencies",{params})
 }
 
 export const fetchByPaginate = (page:number) => {

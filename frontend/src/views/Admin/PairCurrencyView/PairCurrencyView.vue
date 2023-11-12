@@ -43,7 +43,7 @@ const pairCurrenciesCollections = computed(() => {
         return []
     })
 
-
+//Gestion des pages
 const goNextPage = () => {
     const nextPage = indexPage.value +=  1
     fetchData(nextPage)
@@ -269,9 +269,6 @@ const updateFormValues = async (values: PairCurrencyType) => {
                 
                 <CustomPaginator :go-first-page="goFirstPage" :total-page="lastPage" :index-page="indexPage" :total-records="totalRecords"  :go-last-page="goLastPage" :go-next-page="goNextPage"  :go-prev-page="goPrevPage" :last-page="lastPage" />
 
-             <!--    <Paginator :rows="5"  :pt="{
-                    nextPageButton:next
-                }"   :totalRecords="6" ></Paginator> # --->
 
                 <!-- modal de suppression de la devise -->
                 <Dialog v-model:visible="deletePairCurrencyDialog" :style="{ width: '450px' }" header="Suppression"

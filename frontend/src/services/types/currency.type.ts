@@ -1,3 +1,5 @@
+import { LinksType, MetaType } from "./ApiServerRessponse.type";
+
 export type CurrencyType = {
   id?: number;
   code?: string;
@@ -11,6 +13,8 @@ export type CurrencyWithoutId = Omit<CurrencyType, "id">;
 
 export type ApiCurrencySuccess = {
   data: CurrencyType[];
+  links:LinksType
+  meta:MetaType
 };
 
 export type CurrencyList = {

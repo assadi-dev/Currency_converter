@@ -14,16 +14,15 @@ import FormCurrencyView from './FormCurrencyView.vue';
 import { defaultFormCurrency } from './SchemaValidation';
 import * as CurencyApi from "../../../services/api/Currency.api"
 import * as CurrencyDialogMessage from "../../../services/dialogmessage/Currency"
-import { string } from 'yup';
 import DialogDeleteSelected from '../../../components/Dialog/DialogDeleteSelected.vue';
+import CustomPaginator from '../../../components/Navigations/CustomPaginator.vue';
 
 
 
 
-const first = ref(0);
-//const loading = ref(false);
-const totalRecords = ref(8);
-const selectAll = ref(false);
+const indexPage = ref<number | null>(1)
+const totalRecords = ref<number | null>(1);
+const lastPage = ref(1)
 const toast = useToast()
 
 const stateSelectedCurrency = ref<Omit<CurrencyType, "created_at" | "updated_at"> | null>()
@@ -32,13 +31,42 @@ const deleteMessage = ref<string>("")
 
 
 //Fetching des devises vers le serveur
-const { isLoading, currencies, error } = useFetchCurrencies()
+const { isLoading, currencies, error,fetchData } = useFetchCurrencies()
 
 
-const currenciesCollections = computed<ApiCurrencySuccess | null>(() => {
-    const { data } = currencies.value
+const currenciesCollections = computed(() => {
+    if (currencies.value) {
+        const { data,meta } = currencies.value
+    totalRecords.value = meta.total
+        lastPage.value = meta.last_page
     return data
+}
 })
+
+//Gestion des pages
+
+
+
+const goNextPage = () => {
+    const nextPage = indexPage.value += 1
+    console.log(nextPage);
+    
+    fetchData(nextPage)
+}
+const goPrevPage = () => {
+    const prevPage = indexPage.value +=  -1
+    fetchData(prevPage)
+}
+
+const goLastPage = () => {
+    indexPage.value = lastPage.value
+    fetchData(lastPage.value)
+}
+const goFirstPage = () => {
+    indexPage.value = 1
+    fetchData(1)
+}
+
 
 /** Stocage de devise selectionnée */
 const selectedCurrency = ref();
@@ -153,6 +181,11 @@ const deleteCurrency = async() => {
 }
 
 
+
+
+
+
+
 </script>
 
 <template>
@@ -189,6 +222,9 @@ const deleteCurrency = async() => {
                         </template>
                     </Column>
                 </DataTable>
+
+                <CustomPaginator :go-first-page="goFirstPage" :total-page="lastPage" :index-page="indexPage" :total-records="totalRecords"  :go-last-page="goLastPage" :go-next-page="goNextPage"  :go-prev-page="goPrevPage" :last-page="lastPage" />
+
 
                 <!-- modal de suppression des elements selectionnés -->
                 <Dialog v-model:visible="deleteCurrencyDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">

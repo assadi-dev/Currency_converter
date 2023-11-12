@@ -9,12 +9,16 @@ export const useFetchCurrencies = () => {
     const error = ref<string | null>(null)
   
     const isLoading = ref(false)
-    async function fetchData() {
+    async function fetchData(page?:number) {
         isLoading.value = true
     
-        try {
-          const response = await CurrencyApi.fetchAll()
+      try {
+        if (page) {
+          const params = {page}
+          const response = await CurrencyApi.fetchAll(params)
           currencies.value = response.data
+          }
+       
         } catch (err: unknown) {
           error.value = (err as Error).message
         } finally {
@@ -22,8 +26,8 @@ export const useFetchCurrencies = () => {
         }
       }
     
-      fetchData()
-      return { currencies, error, isLoading }
+      fetchData(1)
+      return { currencies, error, isLoading,fetchData  }
 
 }
 
@@ -52,5 +56,5 @@ export const useFetchListCurrencies = () => {
   
   fetchingData()
 
-  return { currencyList, error, isLoading,fetchingData }
+  return { currencyList, error, isLoading}
 }
