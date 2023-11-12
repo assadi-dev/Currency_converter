@@ -4,16 +4,24 @@ import { ApiPairCurrencySuccess } from "../services/types/pairCurrency.type"
 
 
 export const useFetchPairCurrencies = () => {
+
+ 
+  
+  //const props = def
+
     const pairCurrencies = ref<ApiPairCurrencySuccess | null>(null)
 
     const error = ref<string | null>(null)
   
     const isLoading = ref(false)
-    async function fetchData() {
+  
+
+    async function fetchData(page:number) {
         isLoading.value = true
     
-        try {
-          const response = await pairCurrencyApi.fetchAll()
+      try {
+          const params = {page}
+          const response = await pairCurrencyApi.fetchAll(params)
           pairCurrencies.value = response.data
         } catch (err: unknown) {
           error.value = (err as Error).message
@@ -21,12 +29,13 @@ export const useFetchPairCurrencies = () => {
           isLoading.value = false
         }
       }
+    fetchData(1)
     
-      fetchData()
     return {
         pairCurrencies,
         error,
-        isLoading
+      isLoading,
+      fetchData
     }
 
 }

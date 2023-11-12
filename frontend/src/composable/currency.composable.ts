@@ -52,5 +52,5 @@ export const useFetchListCurrencies = () => {
   
   fetchingData()
 
-  return { currencyList, error, isLoading }
+  return { currencyList, error, isLoading,fetchingData }
 }

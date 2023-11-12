@@ -15,7 +15,7 @@ import * as CurrencyApi from "../../services/api/Currency.api"
 import InputText from "primevue/inputtext";
 import {CurrencyFormSchema,ResultConversionType} from "./SchemaValidation"
 
-const { currencyList, isLoading, error } = useFetchListCurrencies()
+const { currencyList, isLoading, error, } = useFetchListCurrencies()
 
 const { handleSubmit,defineInputBinds, errors } = useForm({
     initialValues:{amount:1.00,fromCurrency:null,toCurrency:null},

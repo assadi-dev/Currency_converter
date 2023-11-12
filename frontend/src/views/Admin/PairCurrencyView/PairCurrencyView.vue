@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Toolbar from "primevue/toolbar"
 import Button from "primevue/button"
@@ -16,28 +16,51 @@ import * as PairCurencyApi from "../../../services/api/PairCurrency.api"
 import { PairCurrencyFormValue } from "../../../services/types/Form.types"
 import * as PairDialogMessage from "../../../services/dialogmessage/PairCurrency"
 import FormEditPairCurrencyView from './FormEditPairCurrencyView.vue';
+import CustomPaginator from '../../../components/Navigations/CustomPaginator.vue';
 
 
-
-const { pairCurrencies, isLoading, error } = useFetchPairCurrencies()
-
-const pairCurrenciesCollections = computed(() => {
-    const { data } = pairCurrencies?.value
-    return data
-})
-
-
-
-
-const first = ref(0);
-//const loading = ref(false);
-const totalRecords = ref(8);
-const selectAll = ref(false);
-const toast = useToast()
 
 
 //Fetching des devises vers le serveur
-// const {isLoading,currencies,error}=  useFetchCurrencies()
+const { pairCurrencies, isLoading, error, fetchData } = useFetchPairCurrencies()
+
+const indexPage = ref<number | null>(1)
+const totalRecords = ref<number | null>(1);
+const selectAll = ref(false);
+const toast = useToast()
+const lastPage = ref(1)
+
+
+const pairCurrenciesCollections = computed(() => {
+    if (pairCurrencies.value) {
+        const { data,meta } = pairCurrencies.value
+        totalRecords.value = meta.total
+        lastPage.value = meta.last_page
+            return data
+    }
+        return []
+    })
+
+
+const goNextPage = () => {
+    const nextPage = indexPage.value +=  1
+    fetchData(nextPage)
+}
+const goPrevPage = () => {
+    const prevPage = indexPage.value +=  -1
+    fetchData(prevPage)
+}
+
+const goLastPage = () => {
+    indexPage.value = lastPage.value
+    fetchData(lastPage.value)
+}
+const goFirstPage = () => {
+    indexPage.value = 1
+    fetchData(1)
+}
+
+
 
 
 /**
@@ -212,10 +235,10 @@ const updateFormValues = async (values: PairCurrencyType) => {
                     </template>
 
                 </Toolbar>
-                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" :paginator="true"
-                    :rows="5" v-model:selection="selectedPairCurrency"
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    :rowsPerPageOptions="[5, 10, 25]"
+                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" 
+                 
+                
+                   
                     currentPageReportTemplate="Afficher {first} à {last} sur {totalRecords} Devises" :totalRecords="8">
 
                     <template #header>
@@ -241,8 +264,12 @@ const updateFormValues = async (values: PairCurrencyType) => {
                         </template>
                     </Column>
                 </DataTable>
+                
+                <CustomPaginator />
 
-
+             <!--    <Paginator :rows="5"  :pt="{
+                    nextPageButton:next
+                }"   :totalRecords="6" ></Paginator> # --->
 
                 <!-- modal de suppression de la devise -->
                 <Dialog v-model:visible="deletePairCurrencyDialog" :style="{ width: '450px' }" header="Suppression"
