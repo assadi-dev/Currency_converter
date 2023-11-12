@@ -6,7 +6,7 @@ import { adminInstance } from "./instance.tsx"
 
 
 export const fetchAll = (params) => {
-   return adminInstance.get("/currency_convert_pairs",{params})
+   return adminInstance.get(`/currency_convert_pairs`,{params})
 }
 export const fetchOne = (id:string) => {
    return adminInstance.get(`/currency_convert_pair/${id}`)

@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Toolbar from "primevue/toolbar"
 import Button from "primevue/button"
@@ -30,6 +30,7 @@ const totalRecords = ref<number | null>(1);
 const selectAll = ref(false);
 const toast = useToast()
 const lastPage = ref(1)
+
 
 
 

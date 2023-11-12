@@ -1,9 +1,6 @@
 <template>
     <div class="layout-wrapper">
-        <div class="layout-topbar">
-
-
-        </div>
+        <TopBar />
 
         <main class="layout-main-container">
             <SidebarView />
@@ -20,6 +17,7 @@
 import { useRouter } from 'vue-router';
 import { AUTH_KEY_STORAGE } from '../../services/utils/storage';
 import SidebarView from "../../components/Navigations/SidebarView.vue"
+import TopBar from '../../components/Navigations/TopBar.vue';
 
 
 const authStorage = localStorage.getItem(AUTH_KEY_STORAGE)
