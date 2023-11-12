@@ -17,6 +17,7 @@ import { PairCurrencyFormValue } from "../../../services/types/Form.types"
 import * as PairDialogMessage from "../../../services/dialogmessage/PairCurrency"
 import FormEditPairCurrencyView from './FormEditPairCurrencyView.vue';
 import CustomPaginator from '../../../components/Navigations/CustomPaginator.vue';
+import LoadingTable  from "../../../components/LoadingTable.vue";
 
 
 
@@ -119,11 +120,8 @@ const deleteSelectedCurrency = async() => {
     try {
 startProcess.value = true
        await  PairCurencyApi.removeMultiple(selectedPairCurrency.value);
-
-        
-    
+      
         pairCurrencies.value.data = pairCurrencies.value.data.filter((val) => !selectedPairCurrency.value.includes(val));
-    
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.DELETE_SELECTED_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: PairDialogMessage.TITLE_FAILED, detail: PairDialogMessage.DELETE_SELECTED_PAIR_FAILED, life: 5000 });
@@ -174,7 +172,13 @@ const postFormValues = async (values: PairCurrencyFormValue) => {
             
             pairCurrencies?.value?.data.push(pair)
         }
+        totalRecords.value + 1
+        const next = Math.round(  (totalRecords.value / 5) + 0.4) 
+        lastPage.value = next
+        goLastPage()
 
+  
+       
       
         toast.add({ severity: 'success', summary: PairDialogMessage.TITLE_SUCCESS, detail: PairDialogMessage.ADD_PAIR_SUCCESS, life: 3000 });
     } catch (error) {
@@ -237,11 +241,8 @@ const updateFormValues = async (values: PairCurrencyType) => {
                     </template>
 
                 </Toolbar>
-                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" 
-                 
-                
-                   
-                    currentPageReportTemplate="Afficher {first} à {last} sur {totalRecords} Devises" :totalRecords="8">
+                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" v-model:selection="selectedPairCurrency"
+                  currentPageReportTemplate="Afficher {first} à {last} sur {totalRecords} Devises" :totalRecords="8">
 
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -269,7 +270,7 @@ const updateFormValues = async (values: PairCurrencyType) => {
                 
                 <CustomPaginator :go-first-page="goFirstPage" :total-page="lastPage" :index-page="indexPage" :total-records="totalRecords"  :go-last-page="goLastPage" :go-next-page="goNextPage"  :go-prev-page="goPrevPage" :last-page="lastPage" />
 
-
+                <LoadingTable v-if="isLoading" />
                 <!-- modal de suppression de la devise -->
                 <Dialog v-model:visible="deletePairCurrencyDialog" :style="{ width: '450px' }" header="Suppression"
                     :modal="true">

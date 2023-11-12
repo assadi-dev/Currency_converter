@@ -49,8 +49,6 @@ const currenciesCollections = computed(() => {
 
 const goNextPage = () => {
     const nextPage = indexPage.value += 1
-    console.log(nextPage);
-    
     fetchData(nextPage)
 }
 const goPrevPage = () => {
@@ -92,7 +90,7 @@ const toggleEditCurrency = (currency: Omit<CurrencyType, "created_at" | "updated
 }
 
 const toggleDeleteConfirm = (currency: Omit<CurrencyType, "created_at" | "updated_at">) => {
-    if(currency?.count == 0) return
+    if(currency?.count > 0) return
     deleteMessage.value = `Etes vous sur de vouloir supprimer la devise ${currency.code}-${currency.name} ?`
     stateSelectedCurrency.value = currency
     deleteCurrencyDialog.value = !deleteCurrencyDialog.value;
@@ -109,6 +107,11 @@ const submitData = async (data: defaultFormCurrency) => {
 
         currencies.value.data.push(payload)
 
+         totalRecords.value + 1
+        const next = Math.round(  (totalRecords.value / 5) + 0.4) 
+        lastPage.value = next
+        goLastPage()
+ 
         toast.add({ severity: 'success', summary: CurrencyDialogMessage.TITLE_SUCCESS, detail: CurrencyDialogMessage.ADD_CURRENCY_SUCCESS, life: 3000 });
 
   } catch (error) {
@@ -142,7 +145,8 @@ const submitUpdateData = async (data: CurrencyType) => {
     return v
     })
 
-    currencies.value.data = updatedCollections
+        currencies.value.data = updatedCollections
+
     
     toast.add({ severity: 'success', summary: CurrencyDialogMessage.TITLE_SUCCESS, detail: CurrencyDialogMessage.EDIT_CURRENCY_SUCCESS, life: 3000 });
 
@@ -224,7 +228,7 @@ const deleteCurrency = async() => {
                 </DataTable>
 
                 <CustomPaginator :go-first-page="goFirstPage" :total-page="lastPage" :index-page="indexPage" :total-records="totalRecords"  :go-last-page="goLastPage" :go-next-page="goNextPage"  :go-prev-page="goPrevPage" :last-page="lastPage" />
-
+                <LoadingTable v-if="isLoading" />
 
                 <!-- modal de suppression des elements selectionnés -->
                 <Dialog v-model:visible="deleteCurrencyDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
