@@ -242,7 +242,7 @@ const updateFormValues = async (values: PairCurrencyType) => {
                     </template>
 
                 </Toolbar>
-                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" v-model:selection="selectedPairCurrency"
+                <DataTable v-if="!isLoading" dataKey="id" ref="dt" :value="pairCurrenciesCollections" 
                   currentPageReportTemplate="Afficher {first} à {last} sur {totalRecords} Devises" :totalRecords="8">
 
                     <template #header>
@@ -251,7 +251,7 @@ const updateFormValues = async (values: PairCurrencyType) => {
                         </div>
                     </template>
 
-                    <Column selectionMode="multiple" style="width: 3rem"></Column>
+                    
                     <Column field="id" header="ID" style="min-width:3rem"></Column>
                     <Column field="codeFromCurrency" header="Code Devise entrant" style="min-width:5rem"></Column>
                     <Column field="nameFromCurrency" header="Devise entrant" style="min-width:5rem"></Column>
