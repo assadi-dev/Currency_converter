@@ -1,5 +1,5 @@
 
-export const AUTH_KEY_STORAGE = `${import.meta.env.VITE_APP_NAME}_auth_token"`
+export const AUTH_KEY_STORAGE = `${import.meta.env.VITE_APP_NAME}_auth_token`
 
 
 export const setItem = (key:string, data:any) => {
@@ -17,7 +17,8 @@ export const setItem = (key:string, data:any) => {
 
 export const getItem = (key: string) => {
     try {
-        const result:any = localStorage.getItem(key)
+      const result: any = localStorage.getItem(key)
+      
         return JSON.parse(result)
         
     } catch (error) {

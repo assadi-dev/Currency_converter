@@ -4,8 +4,8 @@ import MenuItem from './MenuItem.vue';
 
 const sidebarRoutes = [
     {
-        name: "Tableau de board",
-        to: "/admin/dashboard",
+        name: "Retourner au site",
+        to: "/",
         icon:"pi-home",
     },
     {

@@ -31,15 +31,10 @@ const router = createRouter({
 
         {
           path: '',
-          redirect:{name:"dashboard"},
+          redirect:{name:"pair-currencies"},
           component: HomeAdminViewVue,
           children: [
-            {
-            
-              path: 'dashboard',
-              name: 'dashboard',
-              component: DashboardViewVue
-            },
+     
             {
               path: 'currencies',
               name: 'admin-currencies',
