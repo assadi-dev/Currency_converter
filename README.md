@@ -57,6 +57,7 @@ npm run dev
 connexion vers la page admin
 
 **email:** admin@currency.com
-**Mot de passe: ** password 
+
+**Mot de passe:** password 
 
 
