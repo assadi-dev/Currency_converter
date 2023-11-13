@@ -56,6 +56,10 @@ npm run dev
 
 connexion vers la page admin
 
+Route vers la page admin
+
+http://localhost:8000/admin
+
 **email:** admin@currency.com
 
 **Mot de passe:** password 
