@@ -33,7 +33,7 @@ class CurrencyConverterController extends Controller
 
             $converted = $amount * $exchange_rate;
 
-
+            $this->addCountidPaircurrency($from_currency, $to_currency);
 
             return response()->json([
                 'message' => 'Conversion effectué',
@@ -59,9 +59,23 @@ class CurrencyConverterController extends Controller
     /**Récuperation du taux de conversion */
     public function extract_currency_rate($from_currency, $to_currency)
     {
+
         $exchange_rate = $this->currency_pair_converters->findByExchangeRate($from_currency, $to_currency)->exchange_rate;
         return $exchange_rate;
     }
+
+
+
+    //IMise à jour du compteur d'utilisation de la pair
+    public function addCountidPaircurrency($from_currency, $to_currency)
+    {
+        $id = $this->currency_pair_converters->findByExchangeRate($from_currency, $to_currency)->id;
+        $find =   $this->currency_pair_converters->find($id);
+        $find->count = $find->count + 1;
+        $find->update();
+        return $find;
+    }
+
 
 
 
