@@ -35,7 +35,7 @@ export const adminInstance:AxiosInstance = axios.create({
 
 adminInstance.interceptors.request.use(
     (request) => {
-        request.headers.Authorization = `Bearer ${TOKEN_AUTHORIZATION.token}`;
+        request.headers.Authorization = `Bearer ${TOKEN_AUTHORIZATION?.token}`;
         return request;
     },
     (error: AxiosError) => {

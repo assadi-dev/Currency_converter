@@ -26,12 +26,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::middleware('auth:sanctum')->post('/currency', [CurrencyController::class, 'store']);
-Route::middleware('auth:sanctum')->get('/currencies', [CurrencyController::class, 'index']);
-Route::middleware('auth:sanctum')->get('/currencies/lists', [CurrencyController::class, 'listCurrency']);
+Route::get('/currencies', [CurrencyController::class, 'index']);
+Route::get('/currencies/lists', [CurrencyController::class, 'listCurrency']);
 Route::middleware('auth:sanctum')->get('/currency/{id}', [CurrencyController::class, 'show']);
 Route::middleware('auth:sanctum')->put('/currency/{id}', [CurrencyController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/currency/{id}', [CurrencyController::class, 'destroy']);
-Route::middleware('auth:sanctum')->get('/currency_convert_pairs', [CurrencyConversionPairsController::class, 'index']);
+Route::get('/currency_convert_pairs', [CurrencyConversionPairsController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/currency_convert_pair', [CurrencyConversionPairsController::class, 'store']);
 Route::middleware('auth:sanctum')->post('/currency_convert_pair/code', [CurrencyConversionPairsController::class, 'storeByCode']);
 Route::middleware('auth:sanctum')->put('/currency_convert_pair/{id}', [CurrencyConversionPairsController::class, 'update']);
