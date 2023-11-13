@@ -22,6 +22,14 @@ puis
 php artisan serve
  ```
 
+insertion des donnée test toujours dans le dossier lancer la commande suivant
+
+```
+php artisan migrate:fresh --seed
+
+```
+
+
 pour la partie Frontend
 
 creer le fichier .env sur ce dossier puis rennseigner les infos suivantes
@@ -46,5 +54,9 @@ puis
 npm run dev
  ```
 
+connexion vers la page admin
+
+**email:** admin@currency.com
+**Mot de passe: ** password 
 
 
